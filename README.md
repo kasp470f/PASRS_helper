@@ -1,21 +1,8 @@
-This is very early Keyboard Controller for Pokemon Showdown. I designed it to use it while taking notes on my right hand. It is not very good, but it works.
+This is helper for filling PASRS.
+Currently it is not working. It will be working very soon.
 
-This is very early Alpha, so there are many bugs. Please report them in the issues tab.
+Currently it only triggers the /savereplay command and then saves it to the clipboard. It is planned to be able to fill the PASRS form automatically.
 
-If you can fix some of the bugs, please make a pull request.
-
-## Features
-F1: Toggle Keyboard Control
-1-4: Select Moves.
-X: Toggle Switch Mode.
-1-6: Switch Pokemon (in Switch Mode).
-Z: Tera
-C: Cancel
-A: Close and Main Menu
-D: Bo3 Continute Button
-
-## Future Goals.
-* Overload Focus Room function to add highligthing and toggling switch mode automatically
-* Implement and arrow keys version for more "in cart" feeling.
-* Less jank code.
-* Settings page for selecting default mode etc.
+I'm hustling with the chrome extension controls now.
+Next stop is adding a tab like room tab or showdex to move the controls there.(It might have been easier to do that. I'm not sure. I'm learning as I go.)
+Nexter stop is adding google sheet support to save the replays there automagicly. But i might be lazy to do that. I'm not sure. Clipboard speeds up the process a lot.

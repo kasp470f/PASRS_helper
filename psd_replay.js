@@ -9,18 +9,21 @@ if (_auto_replay_active === null) {
     _auto_replay_active = false;
     localStorage.setItem('_auto_replay_active', _auto_replay_active);
 }
+_auto_replay_active = _auto_replay_active === "true";
 
 let _auto_replay_notifications = localStorage.getItem('_auto_replay_notifications');
 if (_auto_replay_notifications === null) {
     _auto_replay_notifications = true;
     localStorage.setItem('_auto_replay_notifications', _auto_replay_notifications);
 }
+_auto_replay_notifications = _auto_replay_notifications === "true";
 
 let _auto_replay_vgc_only = localStorage.getItem('_auto_replay_vgc_only');
 if (_auto_replay_vgc_only === null) {
-    _auto_replay_vgc_only = false;
+    _auto_replay_vgc_only = true;
     localStorage.setItem('_auto_replay_vgc_only', _auto_replay_vgc_only);
 }
+_auto_replay_vgc_only = _auto_replay_vgc_only === "true";
 
 app.receive = (data) => {
     if (!_auto_replay_active) {
@@ -46,7 +49,8 @@ app.receive = (data) => {
         _appReceive(data);
 
         let receivedRoom = data?.startsWith?.('>');
-        if (_auto_replay_vgc_only && !data.split("-")[1].includes("vgc"))
+        const data_split = data.split("-")
+        if (_auto_replay_vgc_only && !(data_split && data_split.length > 1 && data_split[1].includes("vgc")))
             receivedRoom = undefined;
 
         if (receivedRoom) {
@@ -77,7 +81,11 @@ app.send = (data, room) => {
 }
 
 function createPASRSRoom() {
-    const room = createHtmlRoom("view-pasrs-helper", "PASRS", { side: true, icon: "clipboard", focus: true})
+    const room = createHtmlRoom(
+        "view-pasrs-helper",
+        "PASRS",
+        { side: true, icon: "clipboard", focus: true}
+    )
 
     room.$el.html(`
     <div style="padding: 2vh 5vw">

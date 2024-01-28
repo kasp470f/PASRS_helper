@@ -6,9 +6,6 @@
     "icons": {
         "128": "128.png"
     },
-    "action": {
-        "default_popup": "index.html"
-    },
     "content_scripts": [
         {
             "matches": [
@@ -19,13 +16,11 @@
             ]
         }
     ],
-    "background": {
-        "service_worker": "background.js"
-    },
     "web_accessible_resources": [
         {
             "resources": [
-                "psd_replay.js"
+                "psd_replay.js",
+                "stolen.js"
             ],
             "matches": [
                 "https://play.pokemonshowdown.com/*"

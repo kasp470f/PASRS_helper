@@ -2,6 +2,8 @@ const _rooms = {};
 const _appReceive = app.receive.bind(app);
 const _appSend = app.send.bind(app);
 
+// TODO: Resized rooms are not working properly
+
 let _auto_replay_active = localStorage.getItem('_auto_replay_active');
 if (_auto_replay_active === null) {
     _auto_replay_active = false;
@@ -69,13 +71,13 @@ app.send = (data, room) => {
         _appSend("/savereplay", room);
         _rooms[room] = "finished";
     }
-    if (data.includes("/noreply /leave view-PASRS-helper")) {
+    if (data.includes("/noreply /leave view-pasrs-helper")) {
         createPASRSRoom();
     }
 }
 
 function createPASRSRoom() {
-    const room = createHtmlRoom("view-PASRS-helper", "PASRS", { side: true, icon: "clipboard", focus: true})
+    const room = createHtmlRoom("view-pasrs-helper", "PASRS", { side: true, icon: "clipboard", focus: true})
 
     room.$el.html(`
     <div style="padding: 2vh 5vw">

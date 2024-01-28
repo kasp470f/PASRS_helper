@@ -103,6 +103,9 @@ function createPASRSRoom() {
                 <label for="vgc_only">Create Pastes for VGC Only</label>
             </div>
         </fieldset>
+
+        <br /><br />
+        <a href="https://github.com/alchemistake/PASRS_helper" target="_blank">Source Code</a>
     </div>
     `);
 

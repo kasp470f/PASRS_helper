@@ -2,21 +2,29 @@ const _rooms = {};
 const _appReceive = app.receive.bind(app);
 const _appSend = app.send.bind(app);
 
-let _auto_replay_active = false;
-let _auto_replay_notifications = true;
-let _auto_replay_vgc_only = true;
-// TODO implement vgc only logic
-// TODO add local storage write read
+let _auto_replay_active = localStorage.getItem('_auto_replay_active');
+if (_auto_replay_active === null) {
+    _auto_replay_active = false;
+    localStorage.setItem('_auto_replay_active', _auto_replay_active);
+}
 
-// battle-gen9vgc2024regf-
-// catch vgc after battle before second -
+let _auto_replay_notifications = localStorage.getItem('_auto_replay_notifications');
+if (_auto_replay_notifications === null) {
+    _auto_replay_notifications = true;
+    localStorage.setItem('_auto_replay_notifications', _auto_replay_notifications);
+}
+
+let _auto_replay_vgc_only = localStorage.getItem('_auto_replay_vgc_only');
+if (_auto_replay_vgc_only === null) {
+    _auto_replay_vgc_only = false;
+    localStorage.setItem('_auto_replay_vgc_only', _auto_replay_vgc_only);
+}
+
 app.receive = (data) => {
     if (!_auto_replay_active) {
         _appReceive(data);
         return;
     }
-
-    const receivedRoom = data?.startsWith?.('>');
 
     if (data.includes('|popup||html|<p>Your replay has been uploaded!')) {
         const url = data.slice(data.indexOf('https://'), data.indexOf('" target='));
@@ -34,6 +42,10 @@ app.receive = (data) => {
     }
     else {
         _appReceive(data);
+
+        let receivedRoom = data?.startsWith?.('>');
+        if (_auto_replay_vgc_only && !data.split("-")[1].includes("vgc"))
+            receivedRoom = undefined;
 
         if (receivedRoom) {
             const roomId = data.slice(1, data.indexOf('\n'));
@@ -102,12 +114,15 @@ function createPASRSRoom() {
 
     activation.on('change', function () {
         _auto_replay_active = this.checked;
+        localStorage.setItem('_auto_replay_active', _auto_replay_active);
     });
     notification.on('change', function () {
         _auto_replay_notifications = this.checked;
+        localStorage.setItem('_auto_replay_notifications', _auto_replay_notifications);
     });
     vgc_only.on('change', function () {
         _auto_replay_vgc_only = this.checked;
+        localStorage.setItem('_auto_replay_vgc_only', _auto_replay_vgc_only);
     });
 }
 

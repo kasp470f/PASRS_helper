@@ -114,6 +114,7 @@ function createPASRSRoom() {
 
         <br /><br />
         <a href="https://github.com/alchemistake/PASRS_helper" target="_blank">Source Code</a>
+        <a href="https://twitter.com/alchemistake" target="_blank">Tweet me the issues</a>
     </div>
     `);
 

@@ -36,6 +36,8 @@ app.receive = (data) => {
         const parts = url.split('/');
         var roomId = `battle-${parts[parts.length - 1]}`;
         if (_rooms[roomId] === "finished") {
+            // TODO add a set timeout recursive here for catching not focused case
+            // or read chrome docs to learn how you can copy without focus
             navigator.clipboard.writeText(url).then(() => {
                 if (_auto_replay_notifications)
                     new Notification("Your replay has been uploaded!");

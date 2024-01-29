@@ -34,14 +34,20 @@ app.receive = (data) => {
     if (data.includes('|popup||html|<p>Your replay has been uploaded!')) {
         const url = data.slice(data.indexOf('https://'), data.indexOf('" target='));
         const parts = url.split('/');
+
         var roomId = `battle-${parts[parts.length - 1]}`;
         if (_rooms[roomId] === "finished") {
-            // TODO add a set timeout recursive here for catching not focused case
-            // or read chrome docs to learn how you can copy without focus
-            navigator.clipboard.writeText(url).then(() => {
-                if (_auto_replay_notifications)
-                    new Notification("Your replay has been uploaded!");
-            });
+            clipboardTimeout = setTimeout(
+                function clipboardFunction() {
+                    navigator.clipboard.writeText(url).then(() => {
+                        if (_auto_replay_notifications)
+                            new Notification("Your replay has been uploaded!");
+                    }).catch(() => {
+                        setTimeout(clipboardFunction, 250);
+                    });
+
+                    clearTimeout(clipboardTimeout);
+                }, 0);
             delete _rooms[roomId];
         } else {
             _appReceive(data);
@@ -52,7 +58,7 @@ app.receive = (data) => {
 
         let receivedRoom = data?.startsWith?.('>');
         const data_split = data.split("-")
-        if (_auto_replay_vgc_only && (data_split && data_split.length > 1 && !data_split[1].includes("vgc"))){
+        if (_auto_replay_vgc_only && (data_split && data_split.length > 1 && !data_split[1].includes("vgc"))) {
             receivedRoom = undefined;
         }
 
@@ -87,7 +93,7 @@ function createPASRSRoom() {
     const room = createHtmlRoom(
         "view-pasrs-helper",
         "PASRS",
-        { side: true, icon: "clipboard", focus: true}
+        { side: true, icon: "clipboard", focus: true }
     )
 
     room.$el.html(`

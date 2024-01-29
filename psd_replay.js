@@ -50,8 +50,9 @@ app.receive = (data) => {
 
         let receivedRoom = data?.startsWith?.('>');
         const data_split = data.split("-")
-        if (_auto_replay_vgc_only && !(data_split && data_split.length > 1 && data_split[1].includes("vgc")))
+        if (_auto_replay_vgc_only && (data_split && data_split.length > 1 && !data_split[1].includes("vgc"))){
             receivedRoom = undefined;
+        }
 
         if (receivedRoom) {
             const roomId = data.slice(1, data.indexOf('\n'));

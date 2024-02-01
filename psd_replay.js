@@ -48,6 +48,8 @@ app.receive = (data) => {
 
                     clearTimeout(clipboardTimeout);
                 }, 0);
+            
+            $("#pasrs_games").append(`<li><a href="${url}" target="_blank">${url}</a></li>`);
             delete _rooms[roomId];
         } else {
             _appReceive(data);
@@ -124,6 +126,9 @@ function createPASRSRoom() {
         <br /><br />
         <a href="https://github.com/alchemistake/PASRS_helper" target="_blank">Source Code</a>
         <a href="https://twitter.com/alchemistake" target="_blank">Tweet me the issues</a>
+
+        <h1>Games</h1>
+        <ul id="pasrs_games"></ul>
     </div>
     `);
 

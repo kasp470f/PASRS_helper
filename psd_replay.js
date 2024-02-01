@@ -154,4 +154,12 @@ function createPASRSRoom() {
     });
 }
 
-createPASRSRoom();
+// poor mans await.
+let roomTimer = setTimeout(function roomCreator(){
+    if (app) {
+        clearTimeout(roomTimer);
+        createPASRSRoom();
+    } else {
+        roomTimer = setTimeout(roomCreator, 250);
+    }
+}, 0);

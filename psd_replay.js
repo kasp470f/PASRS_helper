@@ -108,17 +108,17 @@ function createPASRSRoom() {
             <legend>Settings:</legend>
 
             <div>
-                <input type="checkbox" id="activation" name="activation" />
+                <input type="checkbox" id="activation" name="activation" ${_auto_replay_active ? "checked" : ""}/>
                 <label for="activation">Enable</label>
             </div>
 
             <div>
-                <input type="checkbox" id="notification" name="notification" />
+                <input type="checkbox" id="notification" name="notification"  ${_auto_replay_notifications ? "checked" : ""}/>
                 <label for="notification">Send Notifications</label>
             </div>
 
             <div>
-                <input type="checkbox" id="vgc_only" name="vgc_only" />
+                <input type="checkbox" id="vgc_only" name="vgc_only" ${_auto_replay_vgc_only ? "checked": ""}/>
                 <label for="vgc_only">Create Pastes for VGC Only</label>
             </div>
         </fieldset>
@@ -135,10 +135,6 @@ function createPASRSRoom() {
     activation = $('#activation');
     notification = $('#notification');
     vgc_only = $('#vgc_only');
-
-    activation.prop('checked', _auto_replay_active);
-    notification.prop('checked', _auto_replay_notifications);
-    vgc_only.prop('checked', _auto_replay_vgc_only);
 
     activation.on('change', function () {
         _auto_replay_active = this.checked;

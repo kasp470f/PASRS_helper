@@ -1,0 +1,28 @@
+{
+	"manifest_version": 3,
+	"name": "PASRS Helper",
+	"version": "1.0.0",
+	"description": "Automatically save Pokemon Showdown replays to your clipboard.",
+	"icons": {
+		"128": "128.png"
+	},
+	"host_permissions": ["https://play.pokemonshowdown.com/*"],
+	"content_scripts": [
+		{
+			"matches": ["https://play.pokemonshowdown.com/*"],
+			"js": ["dist/main.js"]
+		}
+	],
+	"web_accessible_resources": [
+		{
+			"resources": ["dist/room.js", "dist/psd_replay.js"],
+			"matches": ["https://play.pokemonshowdown.com/*"]
+		}
+	],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "pasrs-helper@malaow3.com",
+			"strict_min_version": "109.0"
+		}
+	}
+}

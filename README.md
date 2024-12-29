@@ -1,8 +1,7 @@
-This is helper for filling PASRS.
-Currently it is not working. It will be working very soon.
+Helper extension for PASRS & [Pokemon Showdown](https://play.pokemonshowdown.com/) that automatically uploads the replay of your last battle in PSD then it will be copied to your clipboard.
+Currently it only triggers the /savereplay command and then saves it to the clipboard.
 
-Currently it only triggers the /savereplay command and then saves it to the clipboard. It is planned to be able to fill the PASRS form automatically.
+Room generation code comes from [Showdex](https://github.com/doshidak/showdex).
 
-Next stop is adding google sheet support to save the replays there automagicly. But i might be lazy to do that. I'm not sure. Clipboard speeds up the process a lot.
+Future plans include adding Google Sheet support to log the replays there automagicly.
 
-If you are a person with more experience in js than me, feel free to show me guidance and help me out. I'm not a js developer, so file structure is weird.

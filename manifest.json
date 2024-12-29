@@ -1,7 +1,7 @@
 {
     "name": "PASRS Helper",
     "description": "Automatically uploads the replay of your last battle in PSD then it will be copied to your clipboard.",
-    "version": "0.1",
+    "version": "0.2",
     "manifest_version": 3,
     "icons": {
         "128": "128.png"
@@ -12,15 +12,15 @@
                 "https://play.pokemonshowdown.com/*"
             ],
             "js": [
-                "inject.js"
+                "dist/main.js"
             ]
         }
     ],
     "web_accessible_resources": [
         {
             "resources": [
-                "psd_replay.js",
-                "stolen.js"
+                "dist/psd_replay.js",
+                "dist/room.js"
             ],
             "matches": [
                 "https://play.pokemonshowdown.com/*"

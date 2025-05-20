@@ -5,3 +5,8 @@ Room generation code comes from [Showdex](https://github.com/doshidak/showdex).
 
 Future plans include adding Google Sheet support to log the replays there automagicly.
 
+# Building from source
+
+- Install [Bun](https://bun.sh/)
+- Clone the repo
+- Run `./build.sh`

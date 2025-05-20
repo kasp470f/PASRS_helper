@@ -142,7 +142,10 @@ function createPASRSRoom() {
             </div>
         </fieldset>
 
-        <br /><br />
+        <br />
+        <p><b>Maintainers:</b> <a href="https://twitter.com/alchemistake" target="_blank">Alchemistake</a> <a href="https://x.com/PokeBin_dev" target="_blank">PokeBin Dev</a></p>
+        <p><a href="https://www.patreon.com/malaow3" target="_blank">Support PokeBin Dev on Patreon!</a></p>
+        <br />
         <a href="https://github.com/alchemistake/PASRS_helper" target="_blank">Source Code</a>
         <a href="https://twitter.com/alchemistake" target="_blank">Tweet me the issues</a>
 

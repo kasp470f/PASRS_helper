@@ -8,8 +8,6 @@ const rooms: Record<string, string> = {};
 const appReceive = app.receive.bind(app);
 const appSend = app.send.bind(app);
 
-
-
 let autoPlaySettings: AutoReplaySettings = new AutoReplaySettings(localStorage.getItem("auto_replay_settings"));
 const updateSettings = () => localStorage.setItem("auto_replay_settings", JSON.stringify(autoPlaySettings));
 

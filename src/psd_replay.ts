@@ -113,7 +113,7 @@ function createPASRSRoom() {
             </div>
 
             <div>
-                <input type="checkbox" id="notification" name="notification"  ${autoPlaySettings.notifications ? "checked" : ""}/>
+                <input type="checkbox" id="notification" name="notification" ${autoPlaySettings.notifications ? "checked" : ""}/>
                 <label for="notification">Send notifications</label>
             </div>
 

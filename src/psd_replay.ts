@@ -4,6 +4,7 @@ import { createHtmlRoom, app } from "./room";
 const VERSION_TEXT = VERSION;
 
 const rooms: Record<string, string> = {};
+const savedRooms: Map<string, string> = new Map<string, string>();
 const appReceive = app.receive.bind(app);
 const appSend = app.send.bind(app);
 
@@ -41,7 +42,7 @@ app.receive = (data: string) => {
 		const parts = url.split("/");
 
 		const roomId = `battle-${parts[parts.length - 1]}`;
-		if (rooms[roomId] === "finished") {
+		if (rooms[roomId] === "finished" && !savedRooms.has(roomId)) {
 			setTimeout(function clipboardFunction() {
 				navigator.clipboard
 					.writeText(url)
@@ -57,6 +58,7 @@ app.receive = (data: string) => {
 			$("#pasrs_games").append(
 				`<li><a href="${url}" target="_blank">${url}</a></li>`,
 			);
+			savedRooms.set(roomId, url);
 			delete rooms[roomId];
 		} else {
 			appReceive(data);
@@ -77,15 +79,17 @@ app.receive = (data: string) => {
 
 		if (receivedRoom) {
 			const roomId = data.slice(1, data.indexOf("\n"));
-			if (data.includes("|init|battle")) {
-				const lines = data.split("\n");
-				if (lines[2].includes(app.user.attributes.name)) {
-					rooms[roomId] = "ongoing";
+			if (!savedRooms.has(roomId)) {
+				if (data.includes("|init|battle")) {
+					const lines = data.split("\n");
+					if (lines[2].includes(app.user.attributes.name)) {
+						rooms[roomId] = "ongoing";
+					}
 				}
-			}
-			if (data.includes("|win|") && rooms[roomId] === "ongoing") {
-				app.send("/savereplay", roomId);
-				rooms[roomId] = "finished";
+				if (data.includes("|win|") && rooms[roomId] === "ongoing") {
+					app.send("/savereplay", roomId);
+					rooms[roomId] = "finished";
+				}
 			}
 		}
 	}

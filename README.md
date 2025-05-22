@@ -12,4 +12,3 @@ Future plans include adding Google Sheet support to log the replays there automa
 - Run `./build.sh`
 
 **Alternatively** you can run `npm run build` to build the project if `bun` does not work.
-

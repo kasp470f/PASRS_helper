@@ -10,9 +10,11 @@ export default defineConfig({
 		filenameHash: false,
 		filename: {
 			js: "[name].js",
+			css: "styles/global.css",
 		},
 		distPath: {
 			js: "",
+			css: "",
 		},
 	},
 	source: {
@@ -24,6 +26,9 @@ export default defineConfig({
 			room: "./src/room.ts",
 			psd_replay: "./src/psd_replay.ts",
 		},
+	},
+	html: {
+		inject: true,
 	},
 	tools: {
 		htmlPlugin: false,

@@ -13,6 +13,9 @@
       ],
       "js": [
         "dist/main.js"
+      ],
+      "css": [
+        "dist/styles/global.css"
       ]
     }
   ],
@@ -20,7 +23,8 @@
     {
       "resources": [
         "dist/psd_replay.js",
-        "dist/room.js"
+        "dist/room.js",
+        "dist/styles/global.css"
       ],
       "matches": [
         "https://play.pokemonshowdown.com/*"

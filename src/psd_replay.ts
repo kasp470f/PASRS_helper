@@ -141,12 +141,12 @@ function createPASRSRoom() {
 }
 
 function bindCheckboxSetting(selector: string, settingKey: keyof AutoReplaySettings) {
-    const element = $(selector);
-    element.on("change", null, null, (event: JQuery.ChangeEvent) => {
-        const item = event.target as HTMLInputElement;
-        autoPlaySettings[settingKey] = item.checked;
-        updateSettings();
-    });
+	const element = $(selector);
+	element.on("change", null, null, (event: JQuery.ChangeEvent) => {
+		const item = event.target as HTMLInputElement;
+		autoPlaySettings[settingKey] = item.checked;
+		updateSettings();
+	});
 }
 
 // poor mans await.

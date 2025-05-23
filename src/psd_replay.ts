@@ -3,7 +3,11 @@ import { createHtmlRoom, app } from "./room";
 // @ts-ignore : VERSION is injected by the bundler
 const VERSION_TEXT = VERSION;
 
-type RoomState = "ongoing" | "finished" | "recorded";
+enum RoomState {
+	OnGoing = "ongoing",
+	Finished = "finished",
+	Recorded = "recorded",
+}
 const rooms: Map<string, RoomState> = new Map();
 const appReceive = app.receive.bind(app);
 const appSend = app.send.bind(app);
@@ -42,7 +46,7 @@ app.receive = (data: string) => {
 		const parts = url.split("/");
 
 		const roomId = `battle-${parts[parts.length - 1]}`;
-		if (rooms.get(roomId) === "finished") {
+		if (rooms.get(roomId) === RoomState.Finished) {
 			setTimeout(function clipboardFunction() {
 				navigator.clipboard
 					.writeText(url)
@@ -58,7 +62,7 @@ app.receive = (data: string) => {
 			$("#pasrs_games").append(
 				`<li><a href="${url}" target="_blank">${url}</a></li>`,
 			);
-			rooms.set(roomId, "recorded");
+			rooms.set(roomId, RoomState.Recorded);
 		} else {
 			appReceive(data);
 		}
@@ -78,16 +82,16 @@ app.receive = (data: string) => {
 
 		if (receivedRoom) {
 			const roomId = data.slice(1, data.indexOf("\n"));
-			if (!rooms.has(roomId) || rooms.get(roomId) !== "recorded") {
+			if (!rooms.has(roomId) || rooms.get(roomId) !== RoomState.Recorded) {
 				if (data.includes("|init|battle")) {
 					const lines = data.split("\n");
 					if (lines[2].includes(app.user.attributes.name)) {
-						rooms.set(roomId, "ongoing");
+						rooms.set(roomId, RoomState.OnGoing);
 					}
 				}
-				if (data.includes("|win|") && rooms.get(roomId) === "ongoing") {
+				if (data.includes("|win|") && rooms.get(roomId) === RoomState.OnGoing) {
 					app.send("/savereplay", roomId);
-					rooms.set(roomId, "finished");
+					rooms.set(roomId, RoomState.Finished);
 				}
 			}
 		}
@@ -103,7 +107,7 @@ app.send = (data: string, roomId?: string) => {
 		rooms.get(roomId) === "ongoing"
 	) {
 		appSend("/savereplay", roomId);
-		rooms.set(roomId, "finished");
+		rooms.set(roomId, RoomState.Finished);
 	}
 	if (data.includes("/noreply /leave view-pasrs-helper")) {
 		createPASRSRoom();

@@ -94,16 +94,16 @@ app.receive = (data: string) => {
 	}
 };
 
-app.send = (data: string, room?: string) => {
-	appSend(data, room);
+app.send = (data: string, roomId?: string) => {
+	appSend(data, roomId);
 	if (
 		auto_replay_active &&
 		data === "/forfeit" &&
-		room &&
-		rooms.get(room) === "ongoing"
+		roomId &&
+		rooms.get(roomId) === "ongoing"
 	) {
-		appSend("/savereplay", room);
-		rooms.set(room, "finished");
+		appSend("/savereplay", roomId);
+		rooms.set(roomId, "finished");
 	}
 	if (data.includes("/noreply /leave view-pasrs-helper")) {
 		createPASRSRoom();

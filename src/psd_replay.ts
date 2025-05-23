@@ -3,8 +3,8 @@ import { createHtmlRoom, app } from "./room";
 // @ts-ignore : VERSION is injected by the bundler
 const VERSION_TEXT = VERSION;
 
-const rooms: Record<string, string> = {};
-const savedRooms: Map<string, string> = new Map<string, string>();
+type RoomState = "ongoing" | "finished" | "recorded";
+const rooms: Map<string, RoomState> = new Map();
 const appReceive = app.receive.bind(app);
 const appSend = app.send.bind(app);
 
@@ -42,7 +42,7 @@ app.receive = (data: string) => {
 		const parts = url.split("/");
 
 		const roomId = `battle-${parts[parts.length - 1]}`;
-		if (rooms[roomId] === "finished" && !savedRooms.has(roomId)) {
+		if (rooms.get(roomId) === "finished") {
 			setTimeout(function clipboardFunction() {
 				navigator.clipboard
 					.writeText(url)
@@ -58,8 +58,7 @@ app.receive = (data: string) => {
 			$("#pasrs_games").append(
 				`<li><a href="${url}" target="_blank">${url}</a></li>`,
 			);
-			savedRooms.set(roomId, url);
-			delete rooms[roomId];
+			rooms.set(roomId, "recorded");
 		} else {
 			appReceive(data);
 		}
@@ -79,16 +78,16 @@ app.receive = (data: string) => {
 
 		if (receivedRoom) {
 			const roomId = data.slice(1, data.indexOf("\n"));
-			if (!savedRooms.has(roomId)) {
+			if (!rooms.has(roomId) || rooms.get(roomId) !== "recorded") {
 				if (data.includes("|init|battle")) {
 					const lines = data.split("\n");
 					if (lines[2].includes(app.user.attributes.name)) {
-						rooms[roomId] = "ongoing";
+						rooms.set(roomId, "ongoing");
 					}
 				}
-				if (data.includes("|win|") && rooms[roomId] === "ongoing") {
+				if (data.includes("|win|") && rooms.get(roomId) === "ongoing") {
 					app.send("/savereplay", roomId);
-					rooms[roomId] = "finished";
+					rooms.set(roomId, "finished");
 				}
 			}
 		}
@@ -101,10 +100,10 @@ app.send = (data: string, room?: string) => {
 		auto_replay_active &&
 		data === "/forfeit" &&
 		room &&
-		rooms[room] === "ongoing"
+		rooms.get(room) === "ongoing"
 	) {
 		appSend("/savereplay", room);
-		rooms[room] = "finished";
+		rooms.set(room, "finished");
 	}
 	if (data.includes("/noreply /leave view-pasrs-helper")) {
 		createPASRSRoom();

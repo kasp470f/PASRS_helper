@@ -3,7 +3,12 @@ import { createHtmlRoom, app } from "./room";
 // @ts-ignore : VERSION is injected by the bundler
 const VERSION_TEXT = VERSION;
 
-const rooms: Record<string, string> = {};
+enum RoomState {
+	OnGoing = "ongoing",
+	Finished = "finished",
+	Recorded = "recorded",
+}
+const rooms: Map<string, RoomState> = new Map();
 const appReceive = app.receive.bind(app);
 const appSend = app.send.bind(app);
 
@@ -41,7 +46,7 @@ app.receive = (data: string) => {
 		const parts = url.split("/");
 
 		const roomId = `battle-${parts[parts.length - 1]}`;
-		if (rooms[roomId] === "finished") {
+		if (rooms.get(roomId) === RoomState.Finished) {
 			setTimeout(function clipboardFunction() {
 				navigator.clipboard
 					.writeText(url)
@@ -57,7 +62,7 @@ app.receive = (data: string) => {
 			$("#pasrs_games").append(
 				`<li><a href="${url}" target="_blank">${url}</a></li>`,
 			);
-			delete rooms[roomId];
+			rooms.set(roomId, RoomState.Recorded);
 		} else {
 			appReceive(data);
 		}
@@ -77,30 +82,32 @@ app.receive = (data: string) => {
 
 		if (receivedRoom) {
 			const roomId = data.slice(1, data.indexOf("\n"));
-			if (data.includes("|init|battle")) {
-				const lines = data.split("\n");
-				if (lines[2].includes(app.user.attributes.name)) {
-					rooms[roomId] = "ongoing";
+			if (!rooms.has(roomId) || rooms.get(roomId) !== RoomState.Recorded) {
+				if (data.includes("|init|battle")) {
+					const lines = data.split("\n");
+					if (lines[2].includes(app.user.attributes.name)) {
+						rooms.set(roomId, RoomState.OnGoing);
+					}
 				}
-			}
-			if (data.includes("|win|") && rooms[roomId] === "ongoing") {
-				app.send("/savereplay", roomId);
-				rooms[roomId] = "finished";
+				if (data.includes("|win|") && rooms.get(roomId) === RoomState.OnGoing) {
+					app.send("/savereplay", roomId);
+					rooms.set(roomId, RoomState.Finished);
+				}
 			}
 		}
 	}
 };
 
-app.send = (data: string, room?: string) => {
-	appSend(data, room);
+app.send = (data: string, roomId?: string) => {
+	appSend(data, roomId);
 	if (
 		auto_replay_active &&
 		data === "/forfeit" &&
-		room &&
-		rooms[room] === "ongoing"
+		roomId &&
+		rooms.get(roomId) === "ongoing"
 	) {
-		appSend("/savereplay", room);
-		rooms[room] = "finished";
+		appSend("/savereplay", roomId);
+		rooms.set(roomId, RoomState.Finished);
 	}
 	if (data.includes("/noreply /leave view-pasrs-helper")) {
 		createPASRSRoom();

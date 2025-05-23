@@ -1,11 +1,9 @@
-let s: HTMLScriptElement;
+function injectScript(file: string) {
+	const s: HTMLScriptElement = document.createElement("script");
+	s.src = chrome.runtime.getURL(file);
+	s.onload = () => s.remove();
+	(document.head || document.documentElement).append(s);
+}
 
-s = document.createElement("script");
-s.src = chrome.runtime.getURL("dist/room.js");
-s.onload = () => s.remove();
-(document.head || document.documentElement).append(s);
-
-s = document.createElement("script");
-s.src = chrome.runtime.getURL("dist/psd_replay.js");
-s.onload = () => s.remove();
-(document.head || document.documentElement).append(s);
+injectScript("dist/room.js");
+injectScript("dist/psd_replay.js");

@@ -1,3 +1,4 @@
+import { AutoReplaySettings } from "./auto_replay";
 import { createHtmlRoom, app } from "./room";
 
 // @ts-ignore : VERSION is injected by the bundler
@@ -12,31 +13,36 @@ const rooms: Map<string, RoomState> = new Map();
 const appReceive = app.receive.bind(app);
 const appSend = app.send.bind(app);
 
-let auto_replay_active = localStorage.getItem("auto_replay_active") === "true";
-if (auto_replay_active === null) {
-	auto_replay_active = false;
-	localStorage.setItem("auto_replay_active", auto_replay_active.toString());
-}
+let autoPlaySettings: AutoReplaySettings = new AutoReplaySettings(localStorage.getItem("auto_replay_settings"));
+const updateSettings = () => localStorage.setItem("auto_replay_settings", JSON.stringify(autoPlaySettings));
+updateOldSettings();
 
-let auto_replay_notifications =
-	localStorage.getItem("auto_replay_notifications") === "true";
-if (auto_replay_notifications === null) {
-	auto_replay_notifications = true;
-	localStorage.setItem(
-		"auto_replay_notifications",
-		auto_replay_notifications.toString(),
-	);
-}
+// Leave this code for a while, until we are sure that the code is not needed anymore.
+// This code is for updating the old settings to the new format. After a while, we can remove this code.
+function updateOldSettings(): void {
+	let active = localStorage.getItem("auto_replay_active");
+	let notifications = localStorage.getItem("auto_replay_notifications");
+	let vgc_only = localStorage.getItem("auto_replay_vgc_only");
 
-let auto_replay_vgc_only =
-	localStorage.getItem("auto_replay_vgc_only") === "true";
-if (auto_replay_vgc_only === null) {
-	auto_replay_vgc_only = true;
-	localStorage.setItem("auto_replay_vgc_only", auto_replay_vgc_only.toString());
+	if (active !== null) {
+		autoPlaySettings.active = active === "true";
+		localStorage.removeItem("auto_replay_active");
+	}
+	if (notifications !== null) {
+		autoPlaySettings.notifications = notifications === "true";
+		localStorage.removeItem("auto_replay_notifications");
+	}
+	if (vgc_only !== null) {
+		autoPlaySettings.vgc_only = vgc_only === "true";
+		localStorage.removeItem("auto_replay_vgc_only");
+	}
+	if (active !== null || notifications !== null || vgc_only !== null) {
+		updateSettings();
+	}
 }
 
 app.receive = (data: string) => {
-	if (!auto_replay_active) {
+	if (!autoPlaySettings.active) {
 		appReceive(data);
 		return;
 	}
@@ -51,7 +57,7 @@ app.receive = (data: string) => {
 				navigator.clipboard
 					.writeText(url)
 					.then(() => {
-						if (auto_replay_notifications)
+						if (autoPlaySettings.notifications)
 							new Notification("Your replay has been uploaded!");
 					})
 					.catch(() => {
@@ -72,7 +78,7 @@ app.receive = (data: string) => {
 		let receivedRoom = data.startsWith(">");
 		const data_split = data.split("-");
 		if (
-			auto_replay_vgc_only &&
+			autoPlaySettings.vgc_only &&
 			data_split &&
 			data_split.length > 1 &&
 			!data_split[1].includes("vgc")
@@ -101,7 +107,7 @@ app.receive = (data: string) => {
 app.send = (data: string, roomId?: string) => {
 	appSend(data, roomId);
 	if (
-		auto_replay_active &&
+		autoPlaySettings.active &&
 		data === "/forfeit" &&
 		roomId &&
 		rooms.get(roomId) === "ongoing"
@@ -134,17 +140,17 @@ function createPASRSRoom() {
             <legend>Settings:</legend>
 
             <div>
-                <input type="checkbox" id="activation" name="activation" ${auto_replay_active ? "checked" : ""}/>
+                <input type="checkbox" id="activation" name="activation" ${autoPlaySettings.active ? "checked" : ""}/>
                 <label for="activation">Enable</label>
             </div>
 
             <div>
-                <input type="checkbox" id="notification" name="notification"  ${auto_replay_notifications ? "checked" : ""}/>
+                <input type="checkbox" id="notification" name="notification" ${autoPlaySettings.notifications ? "checked" : ""}/>
                 <label for="notification">Send notifications</label>
             </div>
 
             <div>
-                <input type="checkbox" id="vgc_only" name="vgc_only" ${auto_replay_vgc_only ? "checked" : ""}/>
+                <input type="checkbox" id="vgc_only" name="vgc_only" ${autoPlaySettings.vgc_only ? "checked" : ""}/>
                 <label for="vgc_only">Save replays for VGC Only</label>
             </div>
         </fieldset>
@@ -161,30 +167,17 @@ function createPASRSRoom() {
     </div>
   `);
 
-	const activation = $("#activation");
-	const notification = $("#notification");
-	const vgc_only = $("#vgc_only");
+	bindCheckboxSetting("#activation", "active");
+	bindCheckboxSetting("#notification", "notifications");
+	bindCheckboxSetting("#vgc_only", "vgc_only");
+}
 
-	activation.on("change", null, null, (event: JQuery.ChangeEvent) => {
-		const item = event.target;
-		auto_replay_active = item.checked;
-		localStorage.setItem("auto_replay_active", auto_replay_active.toString());
-	});
-	notification.on("change", null, null, (event: JQuery.ChangeEvent) => {
-		const item = event.target;
-		auto_replay_notifications = item.checked;
-		localStorage.setItem(
-			"auto_replay_notifications",
-			auto_replay_notifications.toString(),
-		);
-	});
-	vgc_only.on("change", null, null, (event: JQuery.ChangeEvent) => {
-		const item = event.target;
-		auto_replay_vgc_only = item.checked;
-		localStorage.setItem(
-			"auto_replay_vgc_only",
-			auto_replay_vgc_only.toString(),
-		);
+function bindCheckboxSetting(selector: string, settingKey: keyof AutoReplaySettings) {
+	const element = $(selector);
+	element.on("change", null, null, (event: JQuery.ChangeEvent) => {
+		const item = event.target as HTMLInputElement;
+		autoPlaySettings[settingKey] = item.checked;
+		updateSettings();
 	});
 }
 

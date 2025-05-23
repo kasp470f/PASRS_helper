@@ -22,6 +22,7 @@ export default defineConfig({
 		entry: {
 			main: "./src/main.ts",
 			room: "./src/room.ts",
+			auto_replay: "./src/auto_replay.ts",
 			psd_replay: "./src/psd_replay.ts",
 		},
 	},

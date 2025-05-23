@@ -20,7 +20,8 @@
     {
       "resources": [
         "dist/psd_replay.js",
-        "dist/room.js"
+        "dist/room.js",
+        "dist/auto_replay.js"
       ],
       "matches": [
         "https://play.pokemonshowdown.com/*"

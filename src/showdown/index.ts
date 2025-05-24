@@ -1,11 +1,8 @@
 import { createPASRSRoom } from "./frontend";
+import { App } from "./room";
 import { autoPlaySettings } from "./storage";
 
-
 declare const app: App;
-
-// @ts-ignore : VERSION is injected by the bundler
-const VERSION_TEXT = VERSION;
 
 enum RoomState {
 	OnGoing = "ongoing",
@@ -28,17 +25,19 @@ app.receive = (data: string) => {
 
 		const roomId = `battle-${parts[parts.length - 1]}`;
 		if (rooms.get(roomId) === RoomState.Finished) {
-			setTimeout(function clipboardFunction() {
-				navigator.clipboard
-					.writeText(url)
-					.then(() => {
-						if (autoPlaySettings.notifications)
-							new Notification("Your replay has been uploaded!");
-					})
-					.catch(() => {
-						setTimeout(clipboardFunction, 250);
-					});
-			}, 0);
+			if (autoPlaySettings.use_clipboard) {
+				setTimeout(function clipboardFunction() {
+					navigator.clipboard
+						.writeText(url)
+						.then(() => {
+							if (autoPlaySettings.notifications)
+								new Notification("Your replay has been uploaded!");
+						})
+						.catch(() => {
+							setTimeout(clipboardFunction, 250);
+						});
+				}, 0);
+			}
 
 			$("#pasrs_games").append(
 				`<li><a href="${url}" target="_blank">${url}</a></li>`,
@@ -52,11 +51,23 @@ app.receive = (data: string) => {
 
 		let receivedRoom = data.startsWith(">");
 		const data_split = data.split("-");
+		
+		// VGC only filter
 		if (
 			autoPlaySettings.vgc_only &&
 			data_split &&
 			data_split.length > 1 &&
 			!data_split[1].includes("vgc")
+		) {
+			receivedRoom = false;
+		}
+		
+		// Custom replay filter
+		if (
+			autoPlaySettings.use_custom_replay_filter &&
+			data_split &&
+			data_split.length > 1 &&
+			!data_split[1].includes(autoPlaySettings.custom_replay_filter)
 		) {
 			receivedRoom = false;
 		}
@@ -91,7 +102,7 @@ app.send = (data: string, roomId?: string) => {
 		rooms.set(roomId, RoomState.Finished);
 	}
 	if (data.includes("/noreply /leave view-pasrs-helper")) {
-		createPASRSRoom();
+		setTimeout(createPASRSRoom, 0);
 	}
 };
 

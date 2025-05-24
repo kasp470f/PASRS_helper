@@ -150,7 +150,9 @@ function createPASRSRoom() {
         <a href="https://twitter.com/alchemistake" target="_blank">Tweet me the issues</a>
 
         <h1>Games</h1>
-        <ul id="pasrs_games"></ul>
+		<section id="pasrs_games">
+			<div>test</div>
+		</section>
     </div>
   `);
 

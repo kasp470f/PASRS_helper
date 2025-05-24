@@ -4,9 +4,7 @@ function build() {
 
     mkdir -p "$build_dir/dist"
 
-    cp dist/main.js build/$build_type/dist/main.js
-    cp dist/psd_replay.js build/$build_type/dist/psd_replay.js
-    cp dist/room.js build/$build_type/dist/room.js
+    cp -r dist build/$build_type/dist
     cp 128.png build/$build_type/128.png
 
     if [ "$build_type" = "firefox" ]; then
@@ -39,6 +37,8 @@ function build_source_zip_with_gitignore() {
 
 bun i
 bun run build
+
+rm -rf build
 
 build chrome
 build firefox

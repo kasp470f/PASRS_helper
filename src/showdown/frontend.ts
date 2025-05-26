@@ -16,27 +16,7 @@ function createPASRSRoom() {
         return;
     }
 
-    room.$el.html(`
-    <div style="padding: 2vh 5vw">
-        <h1>PASRS Helper v${VERSION_TEXT}</h1>
-        This is the settings tab for the PASRS Helper.
-        Automatically uploads the replay of your last battle in PSD then it will be copied to your clipboard.
-        <br /><br />
-        <fieldset id="pasrs_settings">
-            <legend>Settings:</legend>
-        </fieldset>
-
-        <br />
-        <p><b>Maintainers:</b> <a href="https://twitter.com/alchemistake" target="_blank">Alchemistake</a> <a href="https://x.com/PokeBin_dev" target="_blank">PokeBin Dev</a></p>
-        <p><a href="https://www.patreon.com/malaow3" target="_blank">Support PokeBin Dev on Patreon!</a></p>
-        <br />
-        <a href="https://github.com/alchemistake/PASRS_helper" target="_blank">Source Code</a>
-        <a href="https://twitter.com/alchemistake" target="_blank">Tweet me the issues</a>
-
-        <h1>Games</h1>
-        <ul id="pasrs_games"></ul>
-    </div>
-  `);
+    room.$el.html(`<div id="react-root"></div>`);
 
     createSettingsControllers();
     createCustomVsVGC();

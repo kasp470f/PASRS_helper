@@ -1,18 +1,19 @@
 import { defineConfig } from "@rsbuild/core";
+import { pluginReact } from '@rsbuild/plugin-react';
+
 import path from "node:path";
 
 console.log(path.resolve(__dirname, "src"));
 
 export default defineConfig({
-	plugins: [],
+	plugins: [pluginReact()],
 
 	output: {
 		filenameHash: false,
-		filename: {
-			js: "[name].js",
-		},
 		distPath: {
 			js: "",
+			css: "",
+			root: "dist"
 		},
 	},
 	source: {
@@ -22,6 +23,7 @@ export default defineConfig({
 		entry: {
 			extension: "./src/extension/index.ts",
 			showdown: "./src/showdown/index.ts",
+			react: "./src/index.tsx",
 		},
 	},
 	tools: {

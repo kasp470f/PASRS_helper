@@ -12,6 +12,7 @@ function injectStyle(file: string) {
 	(document.head || document.documentElement).append(s);
 }
 
+const INJECT_DELAY = 5000;
 
 injectScript("dist/showdown.js");
 injectStyle("dist/react.css");
@@ -19,4 +20,4 @@ setTimeout(() => {
 	console.log("Injecting React and styles after 5 seconds delay");
 	injectScript("dist/lib-react.js");
 	injectScript("dist/react.js");
-}, 5000);
+}, INJECT_DELAY);

@@ -9,7 +9,6 @@ function injectStyle(file: string) {
 	const s: HTMLLinkElement = document.createElement("link");
 	s.rel = "stylesheet";
 	s.href = chrome.runtime.getURL(file);
-	s.onload = () => s.remove();
 	(document.head || document.documentElement).append(s);
 }
 

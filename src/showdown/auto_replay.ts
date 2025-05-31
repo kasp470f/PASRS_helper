@@ -10,7 +10,7 @@ export class AutoReplaySettings {
 		if (!json) return;
 
 		try {
-			const options = JSON.parse(json);
+			const options: Partial<AutoReplaySettings> = JSON.parse(json);
 			Object.assign(this, options);
 		} catch (e) {
 			console.error("Failed to parse AutoReplaySettings JSON:", e);

@@ -25,5 +25,12 @@
         "https://play.pokemonshowdown.com/*"
       ]
     }
-  ]
+  ],
+  "action": {
+    "default_icon": "128.png"
+  },
+  "background": {
+    "service_worker": "dist/background.js"
+  },
+  "permissions": ["scripting", "activeTab"]
 }

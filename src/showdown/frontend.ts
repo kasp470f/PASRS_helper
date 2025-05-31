@@ -41,6 +41,7 @@ function createPASRSRoom() {
     createSettingsControllers();
     createCustomVsVGC();
     hideShowCustomFilter();
+    createGamesList();
 }
 
 function createSettingsControllers() {
@@ -128,6 +129,21 @@ function hideShowCustomFilter() {
         customReplayFilter.show();
     } else {
         customReplayFilter.hide();
+    }
+}
+
+function createGamesList() {
+    const gamesList = $("#pasrs_games");
+    gamesList.empty();
+
+    var sessionStorage = window.sessionStorage;
+    const games = sessionStorage.getItem("pasrs_games");
+    if (games) {
+        const gamesArray = JSON.parse(games);
+        for (const game of gamesArray) {
+            const gameElement = $(`<li><a href="${game.URL}" target="_blank">${game.URL}</a></li>`);
+            gamesList.append(gameElement);
+        }
     }
 }
 

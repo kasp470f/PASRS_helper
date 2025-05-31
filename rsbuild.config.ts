@@ -22,6 +22,7 @@ export default defineConfig({
 		entry: {
 			extension: "./src/extension/index.ts",
 			showdown: "./src/showdown/index.ts",
+			background: "./src/background.ts",
 		},
 	},
 	tools: {

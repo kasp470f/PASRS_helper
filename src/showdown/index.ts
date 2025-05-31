@@ -1,6 +1,9 @@
+import { create } from "domain";
 import { createPASRSRoom } from "./frontend";
 import { App } from "./room";
 import { autoPlaySettings } from "./storage";
+import { Game } from "./game";
+import { updateSessionGames } from "../utils/games.utils";
 
 declare const app: App;
 
@@ -24,6 +27,7 @@ app.receive = (data: string) => {
 		const parts = url.split("/");
 
 		const roomId = `battle-${parts[parts.length - 1]}`;
+		
 		if (rooms.get(roomId) === RoomState.Finished) {
 			if (autoPlaySettings.use_clipboard) {
 				setTimeout(function clipboardFunction() {
@@ -39,6 +43,7 @@ app.receive = (data: string) => {
 				}, 0);
 			}
 
+			updateSessionGames(roomId, url);
 			$("#pasrs_games").append(
 				`<li><a href="${url}" target="_blank">${url}</a></li>`,
 			);
@@ -91,6 +96,7 @@ app.receive = (data: string) => {
 };
 
 app.send = (data: string, roomId?: string) => {
+
 	appSend(data, roomId);
 	if (
 		autoPlaySettings.active &&
@@ -101,9 +107,10 @@ app.send = (data: string, roomId?: string) => {
 		appSend("/savereplay", roomId);
 		rooms.set(roomId, RoomState.Finished);
 	}
-	if (data.includes("/noreply /leave view-pasrs-helper")) {
-		setTimeout(createPASRSRoom, 0);
-	}
+
+	// if (data.includes("/noreply /leave view-pasrs-helper")) {
+	// 	setTimeout(createPASRSRoom, 0);
+	// }
 };
 
 // poor mans await.
@@ -116,3 +123,11 @@ let roomTimer = setTimeout(function roomCreator() {
 		roomTimer = setTimeout(roomCreator, 250);
 	}
 }, 0);
+
+window.addEventListener("trigger-create-room", () => {
+	if (typeof createPASRSRoom === "function") {
+		createPASRSRoom();
+	} else {
+		console.warn("createPASRSRoom is not defined");
+	}
+});

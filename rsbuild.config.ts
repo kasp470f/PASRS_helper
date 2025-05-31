@@ -1,4 +1,5 @@
 import { defineConfig } from "@rsbuild/core";
+import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginReact } from '@rsbuild/plugin-react';
 
 import path from "node:path";
@@ -6,7 +7,7 @@ import path from "node:path";
 console.log(path.resolve(__dirname, "src"));
 
 export default defineConfig({
-	plugins: [pluginReact()],
+	plugins: [pluginReact(), pluginSass()],
 
 	output: {
 		filenameHash: false,

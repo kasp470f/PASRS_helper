@@ -107,10 +107,6 @@ app.send = (data: string, roomId?: string) => {
 		appSend("/savereplay", roomId);
 		rooms.set(roomId, RoomState.Finished);
 	}
-
-	// if (data.includes("/noreply /leave view-pasrs-helper")) {
-	// 	setTimeout(createPASRSRoom, 0);
-	// }
 };
 
 // poor mans await.

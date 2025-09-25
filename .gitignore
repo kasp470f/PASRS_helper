@@ -12,3 +12,4 @@ build/
 .vscode/*
 !.vscode/extensions.json
 .idea
+new structure idea.txt

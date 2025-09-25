@@ -1,6 +1,6 @@
+import { autoPlaySettings } from "../storage/storage";
 import { createPASRSRoom } from "./frontend";
 import { App } from "./room";
-import { autoPlaySettings } from "./storage";
 
 declare const app: App;
 

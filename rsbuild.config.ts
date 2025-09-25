@@ -23,7 +23,7 @@ export default defineConfig({
 		},
 		entry: {
 			extension: "./src/extension/index.ts",
-			showdown: "./src/showdown/index.ts",
+			showdown: "./src/lib/showdown/index.ts",
 			react: "./src/index.tsx",
 		},
 	},

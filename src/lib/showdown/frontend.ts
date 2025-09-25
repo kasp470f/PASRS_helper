@@ -1,6 +1,6 @@
+import { AutoReplaySettings } from "../../types/settings";
+import { autoPlaySettings, updateSettings } from "../storage/storage";
 import { createHtmlRoom } from "./room";
-import { AutoReplaySettings } from "./auto_replay";
-import { autoPlaySettings, updateSettings } from "./storage";
 
 // @ts-ignore : VERSION is injected by the bundler
 const VERSION_TEXT = VERSION;

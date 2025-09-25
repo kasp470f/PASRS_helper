@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import App from './components/App';
 
 const rootEl = document.getElementById('react-root');
 if (rootEl) {

@@ -8,12 +8,8 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://play.pokemonshowdown.com/*"
-      ],
-      "js": [
-        "dist/extension.js"
-      ]
+      "matches": ["https://play.pokemonshowdown.com/*"],
+      "js": ["dist/extension.js"]
     }
   ],
   "web_accessible_resources": [
@@ -24,9 +20,7 @@
         "dist/react.js",
         "dist/react.css"
       ],
-      "matches": [
-        "https://play.pokemonshowdown.com/*"
-      ]
+      "matches": ["https://play.pokemonshowdown.com/*"]
     }
   ]
 }

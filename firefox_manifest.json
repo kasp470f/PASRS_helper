@@ -6,27 +6,17 @@
   "icons": {
     "128": "128.png"
   },
-  "host_permissions": [
-    "https://play.pokemonshowdown.com/*"
-  ],
+  "host_permissions": ["https://play.pokemonshowdown.com/*"],
   "content_scripts": [
     {
-      "matches": [
-        "https://play.pokemonshowdown.com/*"
-      ],
-      "js": [
-        "dist/extension.js"
-      ]
+      "matches": ["https://play.pokemonshowdown.com/*"],
+      "js": ["dist/extension.js"]
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": [
-        "dist/showdown.js"
-      ],
-      "matches": [
-        "https://play.pokemonshowdown.com/*"
-      ]
+      "resources": ["dist/showdown.js"],
+      "matches": ["https://play.pokemonshowdown.com/*"]
     }
   ],
   "browser_specific_settings": {

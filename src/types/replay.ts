@@ -8,6 +8,8 @@ export interface RoomReplay {
 }
 
 export enum ReplayRoomState {
+	Initialized = "initialized",
+	Ignored = "ignored",
 	OnGoing = "ongoing",
 	Finished = "finished",
 	Recorded = "recorded", // try to phase out

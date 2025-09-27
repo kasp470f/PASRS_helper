@@ -12,7 +12,7 @@ function injectStyle(file: string) {
 	(document.head || document.documentElement).append(s);
 }
 
-const INJECT_DELAY = 5000;
+const INJECT_DELAY = 250; // milliseconds
 
 injectScript("dist/showdown.js");
 injectStyle("dist/react.css");

@@ -14,7 +14,6 @@ export class SettingsManager {
     static getInstance(): SettingsManager {
         if (!SettingsManager.instance) {
             SettingsManager.instance = new SettingsManager();
-			console.log('SettingsManager instance created');
         }
         return SettingsManager.instance;
     }

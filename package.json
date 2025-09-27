@@ -23,6 +23,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@swc/helpers": "^0.5.17",
     "@types/chrome": "^0.0.277",
     "@types/jquery": "^3.5.31",
     "@types/node": "^22.7.5",

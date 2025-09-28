@@ -3,6 +3,7 @@ import { getFormatFromData, getRoomIdFromData, getUrlFromData } from "../../util
 import { isFormatMessage, isBattleInitMessage, isBattleFormatMessage, isWinMessage, isLeaveViewCommand, isReplayUploadedMessage } from "../../utils/showdown-protocol-utils";
 import { ReplaysManager } from "../storage/replays-manager";
 import { SettingsManager } from "../storage/settings-manager";
+import { onSettingsUpdated } from "../events";
 import createPASRSRoom from "./pasrs_room";
 import { App } from "./room";
 
@@ -11,6 +12,13 @@ declare const app: App;
 const appReceive = app.receive.bind(app);
 const appSend = app.send.bind(app);
 const settingsManager = SettingsManager.getInstance();
+
+// Listen for settings updates from the React UI
+onSettingsUpdated((updatedSettings) => {
+	// The settings manager will automatically have the updated settings
+	// This ensures the showdown context stays in sync with React UI changes
+	console.log('Showdown context received settings update:', updatedSettings);
+});
 
 app.receive = (data: string) => {
 	const settings = settingsManager.getSettings();

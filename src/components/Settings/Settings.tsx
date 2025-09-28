@@ -61,7 +61,7 @@ const Settings = () => {
 					<i className="fa fa-bug" aria-hidden="true"></i>
 					Report Bug
 				</button>
-				<span>version {VERSION_TEXT}</span>
+				<span className='version-label'>version {VERSION_TEXT}</span>
 			</section>
 		</div>
 	);

@@ -43,6 +43,9 @@ export class SettingsManager {
     }
 
     setCustomFormats(formats: string[]): void {
+        // Remove everything with Bo3
+        formats = formats.filter(format => !format.endsWith("(Bo3)"));
+
         this.customFormats = formats;
         // Broadcast the format update to other contexts
         dispatchFormatsUpdated(formats);

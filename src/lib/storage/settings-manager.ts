@@ -1,4 +1,5 @@
 import { Settings } from "../../types/settings";
+import { dispatchFormatsUpdated, dispatchSettingsUpdated, onFormatsUpdated } from "../events";
 
 const settingsStorageKey = 'pasrs_helper_settings';
 
@@ -6,9 +7,15 @@ export class SettingsManager {
     static instance: SettingsManager;
     settings: Settings;
     customFormats: string[] = [];
+    private removeFormatsListener?: () => void;
 
     private constructor() {
         this.settings = this.loadFromStorage();
+        
+        // Listen for format updates from other contexts
+        this.removeFormatsListener = onFormatsUpdated((formats) => {
+            this.customFormats = formats;
+        });
     }
 
     static getInstance(): SettingsManager {
@@ -28,6 +35,7 @@ export class SettingsManager {
     ): void {
         this.settings[key] = value;
         this.saveToStorage();
+        dispatchSettingsUpdated(this.settings);
     }
 
     getCustomFormats(): string[] {
@@ -36,6 +44,14 @@ export class SettingsManager {
 
     setCustomFormats(formats: string[]): void {
         this.customFormats = formats;
+        // Broadcast the format update to other contexts
+        dispatchFormatsUpdated(formats);
+    }
+
+    destroy(): void {
+        if (this.removeFormatsListener) {
+            this.removeFormatsListener();
+        }
     }
 
     private loadFromStorage(): Settings {

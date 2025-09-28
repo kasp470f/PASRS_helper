@@ -62,29 +62,30 @@ app.receive = (data: string) => {
 	} else {
 		appReceive(data);
 
-		let receivedRoom = data.startsWith(">");
-		const data_split = data.split("-");
+		// TODO: Re-enable room filtering logic when needed
+		// let receivedRoom = data.startsWith(">");
+		// const data_split = data.split("-");
 
-		// VGC only filter
-		if (
-			settings.vgc_only &&
-			data_split &&
-			data_split.length > 1 &&
-			!data_split[1].includes("vgc")
-		) {
-			receivedRoom = false;
-		}
+		// // VGC only filter
+		// if (
+		// 	settings.vgc_only &&
+		// 	data_split &&
+		// 	data_split.length > 1 &&
+		// 	!data_split[1].includes("vgc")
+		// ) {
+		// 	receivedRoom = false;
+		// }
 
-		// Custom replay filter
-		if (
-			settings.use_custom_replay_filter &&
-			data_split &&
-			data_split.length > 1 &&
-			settings.custom_replay_filter.length > 0 &&
-			!settings.custom_replay_filter.some(filter => data_split[1].includes(filter))
-		) {
-			receivedRoom = false;
-		}
+		// // Custom replay filter
+		// if (
+		// 	settings.use_custom_replay_filter &&
+		// 	data_split &&
+		// 	data_split.length > 1 &&
+		// 	settings.custom_replay_filter.length > 0 &&
+		// 	!settings.custom_replay_filter.some(filter => data_split[1].includes(filter))
+		// ) {
+		// 	receivedRoom = false;
+		// }
 
 		// if (receivedRoom) {
 		// 	const roomId = data.slice(1, data.indexOf("\n"));

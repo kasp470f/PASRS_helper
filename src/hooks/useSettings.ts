@@ -1,20 +1,39 @@
 // src/hooks/useSettings.ts
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { SettingsManager } from '../lib/storage/settings-manager';
 import { Settings } from '../types/settings';
+import { onFormatsUpdated, onSettingsUpdated } from '../lib/events';
 
 export const useSettings = () => {
+    const settingsManager = SettingsManager.getInstance();
+    
     const [settings, setSettings] = useState(() =>
-        SettingsManager.getInstance().getSettings()
+        settingsManager.getSettings()
+    );
+    
+    const [customFormats, setCustomFormats] = useState(() =>
+        settingsManager.getCustomFormats()
     );
 
     const updateSetting = useCallback((key: keyof Settings, value: any) => {
-        SettingsManager.getInstance().updateSetting(key, value);
-        // Force a fresh read from the settings manager
-        setSettings({ ...SettingsManager.getInstance().getSettings() });
-    }, []);
+        settingsManager.updateSetting(key, value);
+        // State will be updated via the event listener
+    }, [settingsManager]);
 
-    const customFormats = SettingsManager.getInstance().getCustomFormats();
+    useEffect(() => {
+        const removeFormatsListener = onFormatsUpdated((formats) => {
+            setCustomFormats([...formats]);
+        });
+
+        const removeSettingsListener = onSettingsUpdated((updatedSettings) => {
+            setSettings({ ...updatedSettings });
+        });
+
+        return () => {
+            removeFormatsListener();
+            removeSettingsListener();
+        };
+    }, []);
 
     return { settings, updateSetting, customFormats };
 };

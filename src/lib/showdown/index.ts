@@ -27,10 +27,10 @@ app.receive = (data: string) => {
 	if (isBattleInitMessage(data)) {
 		ReplaysManager.addReplay(data);
 	} 
-	else if (isBattleFormatMessage(data)) {
+	if (isBattleFormatMessage(data)) {
 		ReplaysManager.updateFormatReplay(data);
 	} 
-	else if (isWinMessage(data)) {
+	if (isWinMessage(data)) {
 		const roomId = getRoomIdFromData(data);
 		ReplaysManager.setRoomState(roomId, ReplayRoomState.Finished);
 	}

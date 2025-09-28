@@ -1,0 +1,61 @@
+import { SettingsKey } from '../../types/settings';
+import './Settings.scss';
+import { useSettings } from '../../hooks/useSettings';
+import SettingsCheckbox from '../ui/SettingsCheckbox/SettingsCheckBox';
+
+
+// @ts-ignore : VERSION is injected by the bundler
+const VERSION_TEXT = VERSION;
+
+const Settings = () => {
+	const { settings, updateSetting } = useSettings();
+
+	const handleCheckboxChange = (key: SettingsKey, value: boolean) => {
+		updateSetting(key, value);
+	};
+
+	return (
+		<div className="settings">
+			<h3>Settings</h3>
+
+			<section className="settings-group">
+				<SettingsCheckbox settingsKey="active" label="Enable Automatic Replay Upload"
+					checked={settings.active} onChange={handleCheckboxChange} />
+
+				<SettingsCheckbox settingsKey="use_clipboard" label="Put new replays in clipboard"
+					checked={settings.use_clipboard} onChange={handleCheckboxChange} />
+
+				<SettingsCheckbox settingsKey="notifications" label="Enable Upload Done Notifications"
+					checked={settings.notifications} onChange={handleCheckboxChange} />
+			</section>
+
+			<hr />
+
+			<section className="settings-group">
+				<span>Replay Filtering</span>
+
+				<SettingsCheckbox settingsKey="vgc_only" label="VGC Mode (Only save VGC replays)"
+					checked={settings.vgc_only} onChange={handleCheckboxChange} disabled={settings.use_custom_replay_filter} />
+
+				<SettingsCheckbox settingsKey="use_custom_replay_filter" label="Use Custom Replay Filter"
+					checked={settings.use_custom_replay_filter} onChange={handleCheckboxChange} disabled={settings.vgc_only} />
+			</section>
+
+			<hr style={{ margin: 'auto 0 16px' }} />
+
+			<section className="info-section">
+				<button onClick={openIssuesPage}>
+					<i className="fa fa-bug" aria-hidden="true"></i>
+					Report Bug
+				</button>
+				<span>version {VERSION_TEXT}</span>
+			</section>
+		</div>
+	);
+};
+
+const openIssuesPage = () => {
+	window.open('https://github.com/alchemistake/PASRS_helper/issues', '_blank');
+};
+
+export default Settings;

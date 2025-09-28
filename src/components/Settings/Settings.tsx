@@ -2,15 +2,20 @@ import { SettingsKey } from '../../types/settings';
 import './Settings.scss';
 import { useSettings } from '../../hooks/useSettings';
 import SettingsCheckbox from '../ui/SettingsCheckbox/SettingsCheckBox';
+import { SettingsFormatSelect } from '../ui/SettingsFormatSelect/SettingsFormatSelect';
 
 
 // @ts-ignore : VERSION is injected by the bundler
 const VERSION_TEXT = VERSION;
 
 const Settings = () => {
-	const { settings, updateSetting } = useSettings();
+	const { settings, updateSetting, customFormats } = useSettings();
 
 	const handleCheckboxChange = (key: SettingsKey, value: boolean) => {
+		updateSetting(key, value);
+	};
+
+	const handleFormatSelectChange = (key: SettingsKey, value: string[]) => {
 		updateSetting(key, value);
 	};
 
@@ -39,6 +44,14 @@ const Settings = () => {
 
 				<SettingsCheckbox settingsKey="use_custom_replay_filter" label="Use Custom Replay Filter"
 					checked={settings.use_custom_replay_filter} onChange={handleCheckboxChange} disabled={settings.vgc_only} />
+
+				<SettingsFormatSelect
+					settingsKey="custom_replay_filter"
+					value={settings.custom_replay_filter}
+					customFormats={customFormats}
+					onChange={handleFormatSelectChange}
+					disabled={!settings.use_custom_replay_filter}
+				/>
 			</section>
 
 			<hr style={{ margin: 'auto 0 16px' }} />

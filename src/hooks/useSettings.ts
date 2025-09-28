@@ -14,5 +14,7 @@ export const useSettings = () => {
         setSettings({ ...SettingsManager.getInstance().getSettings() });
     }, []);
 
-    return { settings, updateSetting };
+    const customFormats = SettingsManager.getInstance().getCustomFormats();
+
+    return { settings, updateSetting, customFormats };
 };

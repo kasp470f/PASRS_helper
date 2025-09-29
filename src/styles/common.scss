@@ -4,6 +4,12 @@
 	--showdown-background-dark: #444444;
 }
 
+html.dark {
+	.pasrs-app .content .settings-section {
+		background-color: var(--showdown-background-dark);
+	}
+}
+
 #react-root {
 	height: 100%;
 	display: flex;

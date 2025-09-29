@@ -1,4 +1,5 @@
 import '../styles/common.scss';
+import ReplayList from './ReplayList/ReplayList';
 import Settings from './Settings/Settings';
 
 const App = () => {
@@ -10,7 +11,7 @@ const App = () => {
 			</header>
 			<section className='content'>
 				<section className='replay-section'>
-
+					<ReplayList />
 				</section>
 				<section className='settings-section'>
 					<Settings />

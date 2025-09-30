@@ -33,7 +33,7 @@ app.receive = (data: string) => {
 	} 
 	if (isWinMessage(data)) {
 		const roomId = getRoomIdFromData(data);
-		replaysManager.setRoomState(roomId, ReplayRoomState.Finished);
+		replaysManager.setRoomResult(roomId, data);
 	}
 
 	if (isReplayUploadedMessage(data)) {

@@ -1,11 +1,27 @@
 import { ReplayRoomState, RoomReplay } from "../../types/replay";
 import { getRoomIdFromData, getUserFromCookies } from "../../utils/showdown-data-utils";
+import { dispatchReplaysUpdated, onReplaysUpdated } from "../events";
 
 const replaysStorageKey = 'pasrs_helper_replays';
 
 export class ReplaysManager {
+	replays: RoomReplay[] = [];
+    private removeReplayUpdateListener?: () => void;
+	
+	constructor() {
+		// Listen for replay updates from other contexts
+		this.removeReplayUpdateListener = onReplaysUpdated((replays) => {
+			this.replays = replays;
+		});
+	}
 
-	static getReplays(): RoomReplay[] {
+	destroy(): void {
+		if (this.removeReplayUpdateListener) {
+			this.removeReplayUpdateListener();
+		}
+	}
+
+	getReplays(): RoomReplay[] {
 		const stored = sessionStorage.getItem(replaysStorageKey);
 		if (stored) {
 			try {
@@ -17,37 +33,37 @@ export class ReplaysManager {
 		return [];
 	}
 
-	static clearReplays(): void {
+	clearReplays(): void {
 		sessionStorage.removeItem(replaysStorageKey);
 	}
 
-	static getRoomState(roomId: string): ReplayRoomState | undefined {
+	getRoomState(roomId: string): ReplayRoomState | undefined {
 		const replays = this.getReplays();
 		const replay = replays.find(r => r.id === roomId);
 		return replay ? replay.state : undefined;
 	}
 
-	static setRoomState(roomId: string, state: ReplayRoomState): void {
+	setRoomState(roomId: string, state: ReplayRoomState): void {
 		const replays = this.getReplays();
 		const index = replays.findIndex(r => r.id === roomId);
 		if (index !== -1) {
 			replays[index].state = state;
-			sessionStorage.setItem(replaysStorageKey, JSON.stringify(replays));
+			this.saveReplays(replays);
 		}
 	}
 
-	static hasRoom(roomId: string) {
+	hasRoom(roomId: string) {
 		const replays = this.getReplays();
 		return replays.some(r => r.id === roomId);
 	}
 
-	static isRoomIgnored(roomId: string): boolean {
+	isRoomIgnored(roomId: string): boolean {
 		const replays = this.getReplays();
 		const replay = replays.find(r => r.id === roomId);
 		return replay ? replay.state === ReplayRoomState.Ignored : false;
 	}
 
-	static addReplay(data: string): void {
+	addReplay(data: string): void {
 		const replay = this.initReplay(data);
 		if (!replay) return;
 
@@ -55,10 +71,10 @@ export class ReplaysManager {
 		if (replays.some(r => r.id === replay.id)) return; // Avoid duplicates
 
 		replays.push(replay);
-		sessionStorage.setItem(replaysStorageKey, JSON.stringify(replays));
+		this.saveReplays(replays);
 	}
 
-	static updateFormatReplay(data: string): void {
+	updateFormatReplay(data: string): void {
 		const roomId = getRoomIdFromData(data);
 		if (!roomId) return;
 		if (!this.hasRoom(roomId)) return;
@@ -75,12 +91,12 @@ export class ReplaysManager {
 				const format = formatLine.slice(tierPrefix.length).trim();
 				replay.format = format;
 				replay.state = ReplayRoomState.OnGoing;
-				sessionStorage.setItem(replaysStorageKey, JSON.stringify(replays));
+				this.saveReplays(replays);
 			}
 		}
 	}
 
-	private static initReplay(data: string): RoomReplay | null {
+	private initReplay(data: string): RoomReplay | null {
 		if (!data) return null;
 
 		let id = getRoomIdFromData(data);
@@ -115,5 +131,11 @@ export class ReplaysManager {
 			p1: p1,
 			p2: p2
 		} as RoomReplay;
+	}
+
+	private saveReplays(replays: RoomReplay[]): void {
+		this.replays = replays;
+		sessionStorage.setItem(replaysStorageKey, JSON.stringify(replays));
+		dispatchReplaysUpdated(replays);
 	}
 }

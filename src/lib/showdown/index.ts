@@ -11,6 +11,7 @@ declare const app: App;
 const appReceive = app.receive.bind(app);
 const appSend = app.send.bind(app);
 const settingsManager = SettingsManager.getInstance();
+const replaysManager = new ReplaysManager();
 
 app.receive = (data: string) => {
 	const settings = settingsManager.getSettings();
@@ -25,14 +26,14 @@ app.receive = (data: string) => {
 	}
 	
 	if (isBattleInitMessage(data)) {
-		ReplaysManager.addReplay(data);
+		replaysManager.addReplay(data);
 	} 
 	if (isBattleFormatMessage(data)) {
-		ReplaysManager.updateFormatReplay(data);
+		replaysManager.updateFormatReplay(data);
 	} 
 	if (isWinMessage(data)) {
 		const roomId = getRoomIdFromData(data);
-		ReplaysManager.setRoomState(roomId, ReplayRoomState.Finished);
+		replaysManager.setRoomState(roomId, ReplayRoomState.Finished);
 	}
 
 	if (isReplayUploadedMessage(data)) {
@@ -40,7 +41,7 @@ app.receive = (data: string) => {
 		const roomId = getRoomIdFromData(data);
 		console.log(`Replay uploaded for room ${roomId}: ${url}`);
 
-		if (ReplaysManager.getRoomState(roomId) === ReplayRoomState.Finished) {
+		if (replaysManager.getRoomState(roomId) === ReplayRoomState.Finished) {
 			if (settings.use_clipboard) {
 				setTimeout(function clipboardFunction() {
 					navigator.clipboard
@@ -55,7 +56,7 @@ app.receive = (data: string) => {
 				}, 0);
 			}
 
-			ReplaysManager.setRoomState(roomId, ReplayRoomState.Recorded);
+			replaysManager.setRoomState(roomId, ReplayRoomState.Recorded);
 		} else {
 			appReceive(data);
 		}
@@ -93,12 +94,12 @@ app.receive = (data: string) => {
 		// 		if (isBattleInitMessage(data)) {
 		// 			const lines = data.split("\n");
 		// 			if (lines[2].includes(app.user.attributes.name)) {
-		// 				ReplaysManager.setRoomState(roomId, ReplayRoomState.OnGoing);
+		// 				replaysManager.setRoomState(roomId, ReplayRoomState.OnGoing);
 		// 			}
 		// 		}
-		// 		if (isWinMessage(data) && ReplaysManager.getRoomState(roomId) === ReplayRoomState.OnGoing) {
+		// 		if (isWinMessage(data) && replaysManager.getRoomState(roomId) === ReplayRoomState.OnGoing) {
 		// 			app.send("/savereplay", roomId);
-		// 			ReplaysManager.setRoomState(roomId, ReplayRoomState.Finished);
+		// 			replaysManager.setRoomState(roomId, ReplayRoomState.Finished);
 		// 		}
 		// 	}
 		// }
@@ -109,9 +110,9 @@ app.send = (data: string, roomId?: string) => {
 	const settings = settingsManager.getSettings();
 
 	appSend(data, roomId);
-	if (settings.active && data === "/forfeit" && roomId && ReplaysManager.getRoomState(roomId) === ReplayRoomState.OnGoing) {
+	if (settings.active && data === "/forfeit" && roomId && replaysManager.getRoomState(roomId) === ReplayRoomState.OnGoing) {
 		appSend("/savereplay", roomId);
-		ReplaysManager.setRoomState(roomId, ReplayRoomState.Finished);
+		replaysManager.setRoomState(roomId, ReplayRoomState.Finished);
 	}
 	if (isLeaveViewCommand(data)) {
 		setTimeout(createPASRSRoom, 0);

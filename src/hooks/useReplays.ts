@@ -1,30 +1,38 @@
 import { useState, useCallback, useEffect } from 'react';
 import { ReplaysManager } from '../lib/storage/replays-manager';
 import { RoomReplay, ReplayRoomState } from '../types/replay';
+import { onReplaysUpdated } from '../lib/events';
 
 export const useReplays = () => {
+	const replaysManager = new ReplaysManager();
+
 	const [replays, setReplays] = useState<RoomReplay[]>(() =>
-		ReplaysManager.getReplays()
+		replaysManager.getReplays()
 	);
 
 	const refreshReplays = useCallback(() => {
-		setReplays(ReplaysManager.getReplays());
+		setReplays(replaysManager.getReplays());
 	}, []);
 
 	const updateRoomState = useCallback((roomId: string, state: ReplayRoomState) => {
-		ReplaysManager.setRoomState(roomId, state);
+		replaysManager.setRoomState(roomId, state);
 		refreshReplays();
 	}, [refreshReplays]);
 
 	const clearAllReplays = useCallback(() => {
-		ReplaysManager.clearReplays();
+		replaysManager.clearReplays();
 		setReplays([]);
 	}, []);
 
 	useEffect(() => {
-		const interval = setInterval(refreshReplays, 1000);
-		return () => clearInterval(interval);
-	}, [refreshReplays]);
+		const removeReplaysListener = onReplaysUpdated((updatedReplays) => {
+			setReplays([...updatedReplays]);
+		});
+
+		return () => {
+			removeReplaysListener();
+		};
+	}, [replaysManager]);
 
 	return {
 		replays,

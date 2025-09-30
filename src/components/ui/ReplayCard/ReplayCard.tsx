@@ -16,7 +16,9 @@ export const ReplayCard: React.FC<ReplayCardProps> = ({ roomReplay }) => {
 			</section>
 
 			<div className="replay-actions">
-				<span className="replay-state">{roomReplay.state}</span>
+				<span className="replay-state">
+					{ roomReplay.state == 'finished' ? roomReplay.result : roomReplay.state }
+				</span>
 				<i className="fa fa-clipboard" aria-hidden="true"></i>
 			</div>
 		</div>

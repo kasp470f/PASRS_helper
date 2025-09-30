@@ -1,4 +1,4 @@
-import { ReplayRoomState, RoomReplay } from "../../types/replay";
+import { ReplayRoomResult, ReplayRoomState, RoomReplay } from "../../types/replay";
 import { getRoomIdFromData, getUserFromCookies } from "../../utils/showdown-data-utils";
 import { dispatchReplaysUpdated, onReplaysUpdated } from "../events";
 
@@ -48,6 +48,30 @@ export class ReplaysManager {
 		const index = replays.findIndex(r => r.id === roomId);
 		if (index !== -1) {
 			replays[index].state = state;
+			this.saveReplays(replays);
+		}
+	}
+
+	setRoomResult(roomId: string, data: string) {
+		const replays = this.getReplays();
+		const index = replays.findIndex(r => r.id === roomId);
+		if (index !== -1) {
+			console.log(`Setting result for room ${roomId}`);
+			var replay = replays[index];
+			replay.state = ReplayRoomState.Finished;
+
+			const lines = data.split('\n');
+			const winPrefix = '|win|';
+			var winLine = lines.find(line => line.startsWith(winPrefix));
+			if (winLine) {
+				const winner = winLine.slice(winPrefix.length).trim();
+				if (winner === getUserFromCookies()) {
+					replay.result = ReplayRoomResult.Win;
+				} else {
+					replay.result = ReplayRoomResult.Loss;
+				}
+			}
+
 			this.saveReplays(replays);
 		}
 	}
@@ -129,7 +153,8 @@ export class ReplaysManager {
 			state: ReplayRoomState.Initialized,
 			url: `https://replay.pokemonshowdown.com/${id}`,
 			p1: p1,
-			p2: p2
+			p2: p2,
+			result: ReplayRoomResult.Unknown
 		} as RoomReplay;
 	}
 

@@ -5,6 +5,7 @@ export interface RoomReplay {
 	format?: string;
 	p1: string;
 	p2: string;
+	result: ReplayRoomResult;	
 }
 
 export enum ReplayRoomState {
@@ -13,4 +14,11 @@ export enum ReplayRoomState {
 	OnGoing = "ongoing",
 	Finished = "finished",
 	Recorded = "recorded", // try to phase out
+}
+
+export enum ReplayRoomResult {
+	Unknown = "unknown",
+	Win = "win",
+	Loss = "loss",
+	Draw = "draw",
 }

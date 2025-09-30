@@ -1,4 +1,8 @@
 // Message type detection
+export function isRoomMessage(data: string): boolean {
+	return data.startsWith(">");
+}
+
 export function isReplayUploadedMessage(data: string): boolean {
 	return data.includes("|popup||html|<p>Your replay has been uploaded!");
 }

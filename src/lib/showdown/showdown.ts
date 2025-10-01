@@ -1,6 +1,6 @@
 import { ReplayRoomState } from "../../types/replay";
 import { getFormatFromData, getRoomIdFromData, getRoomIdFromURL, getUrlFromData } from "../../utils/showdown-data-utils";
-import { isFormatMessage, isBattleInitMessage, isBattleFormatMessage, isWinMessage, isLeaveViewCommand, isReplayUploadedMessage } from "../../utils/showdown-protocol-utils";
+import { isFormatMessage, isBattleInitMessage, isBattleFormatMessage, isWinMessage, isLeaveViewCommand, isReplayUploadedMessage, isForfeitCommand } from "../../utils/showdown-protocol-utils";
 import { onSettingsUpdated } from "../events";
 import { ReplaysManager } from "../storage/replays-manager";
 import { SettingsManager } from "../storage/settings-manager";
@@ -96,7 +96,7 @@ app.send = (data: string, roomId?: string) => {
 	const settings = currentSettings;
 
 	appSend(data, roomId);
-	if (settings.active && data === "/forfeit" && roomId && replaysManager.getRoomState(roomId) === ReplayRoomState.OnGoing) {
+	if (settings.active && isForfeitCommand(data) && roomId && replaysManager.getRoomState(roomId) === ReplayRoomState.OnGoing) {
 		appSend("/savereplay", roomId);
 		replaysManager.setRoomState(roomId, ReplayRoomState.Finished);
 	}

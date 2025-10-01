@@ -33,6 +33,11 @@ export class ReplaysManager {
 		return [];
 	}
 
+	getReplay(roomId: string) {
+		const replays = this.getReplays();
+		return replays.find(r => r.id === roomId);
+	}
+
 	clearReplays(): void {
 		sessionStorage.removeItem(replaysStorageKey);
 	}
@@ -45,7 +50,7 @@ export class ReplaysManager {
 
 	setRoomState(roomId: string, state: ReplayRoomState): void {
 		const replays = this.getReplays();
-		const index = replays.findIndex(r => r.id === roomId);
+		const index = replays.findIndex(r => r.id === roomId && r.state !== ReplayRoomState.Ignored);
 		if (index !== -1) {
 			replays[index].state = state;
 			this.saveReplays(replays);
@@ -54,7 +59,7 @@ export class ReplaysManager {
 
 	setRoomResult(roomId: string, data: string) {
 		const replays = this.getReplays();
-		const index = replays.findIndex(r => r.id === roomId);
+		const index = replays.findIndex(r => r.id === roomId && r.state !== ReplayRoomState.Ignored);
 		if (index !== -1) {
 			console.log(`Setting result for room ${roomId}`);
 			var replay = replays[index];
@@ -105,7 +110,7 @@ export class ReplaysManager {
 
 
 		const replays = this.getReplays();
-		const replay = replays.find(r => r.id === roomId);
+		const replay = replays.find(r => r.id === roomId && r.state !== ReplayRoomState.Ignored);
 		if (replay && !replay.format) {
 			const lines = data.split('\n');
 			const tierPrefix = '|tier|';
@@ -113,7 +118,7 @@ export class ReplaysManager {
 
 			if (formatLine) {
 				const format = formatLine.slice(tierPrefix.length).trim();
-				replay.format = format;
+				replay.format = format.replace('(Bo3)', '').trim();
 				replay.state = ReplayRoomState.OnGoing;
 				this.saveReplays(replays);
 			}

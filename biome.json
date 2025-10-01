@@ -9,7 +9,8 @@
     "useIgnoreFile": true
   },
   "formatter": {
-    "indentStyle": "space"
+    "enabled": true,
+    "indentStyle": "tab"
   },
   "javascript": {
     "formatter": {

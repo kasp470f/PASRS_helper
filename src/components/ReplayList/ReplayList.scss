@@ -12,32 +12,42 @@
 		letter-spacing: 1px;
 	}
 
-	.replay-list {
-		border-radius: 4px;
-		flex-direction: column;
+	.replays {
 		flex: 1;
+		display: flex;
+		flex-direction: column;
 		max-width: 550px;
 		display: flex;
 		margin: auto;
 		width: 100%;
-		overflow-y: auto;
 		border: 1px solid var(--border-color);
+		border-radius: 4px;
+		overflow: hidden;
 		margin-bottom: 32px;
-
-		> p {
-			margin: 16px 0;
-			text-transform: uppercase;
-			text-align: center;
-			font-size: 10px;
-			opacity: 0.75;
-		}
-
-		html.dark & {
-			background-color: rgba(0, 0, 0, 0.70);
-		}
-
-		background-color: rgba(242, 247, 250, 0.70);
 		
+		.replay-list {
+			display: flex;
+			overflow-y: auto;
+			flex-direction: column;
+			flex: 1;
+			max-height: 100%;
+
+			> p {
+				margin: 16px 0;
+				text-transform: uppercase;
+				text-align: center;
+				font-size: 10px;
+				opacity: 0.75;
+			}
+
+			html.dark & {
+				background-color: rgba(0, 0, 0, 0.70);
+			}
+
+			background-color: rgba(242, 247, 250, 0.70);
+			
+		}
+
 		footer.replay-footer {
 			text-align: center;
 			font-size: 12px;

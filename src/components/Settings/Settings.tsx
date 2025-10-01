@@ -57,6 +57,10 @@ const Settings = () => {
 			<hr style={{ margin: 'auto 0 16px' }} />
 
 			<section className="info-section">
+				<button onClick={openCreditsPage}>
+					<i className="fa fa-heart" aria-hidden="true"></i>
+					Credits & Contributors
+				</button>
 				<button onClick={openIssuesPage}>
 					<i className="fa fa-bug" aria-hidden="true"></i>
 					Report Bug
@@ -70,5 +74,9 @@ const Settings = () => {
 const openIssuesPage = (): void => {
 	window.open('https://github.com/alchemistake/PASRS_helper/issues', '_blank');
 };
+
+const openCreditsPage = (): void => {
+	window.open('https://github.com/alchemistake/PASRS_helper/tree/main?tab=contributing-ov-file#maintainers--credits', '_blank');
+}
 
 export default Settings;

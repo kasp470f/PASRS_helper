@@ -5,12 +5,26 @@
  */
 export function getRoomIdFromData(data: string): string {
 	const lines = data.split('\n');
-	const battlePrefix = '>battle-';
-	const battleLine = lines.find(line => line.startsWith(battlePrefix));
+	const roomRecievedPrefix = '>';
+	const battlePrefix = 'battle-';
+	const battleLine = lines.find(line => line.startsWith(roomRecievedPrefix + battlePrefix));
 	if (!battleLine) return '';
-	const roomId = battleLine.slice(battlePrefix.length); // Remove '>battle-' prefix
-	return roomId;
+	return battleLine.replace(roomRecievedPrefix, '').trim();
 }
+
+/**
+ * Extracts the room ID from a given replay URL.
+ * @param url - The replay URL string
+ * @returns The extracted room ID, or an empty string if the URL format is invalid
+ */
+export function getRoomIdFromURL(url: string): string {
+	const urlPrefix = 'https://replay.pokemonshowdown.com/';
+	if (!url.startsWith(urlPrefix)) return '';
+	var id = url.replace(urlPrefix, '').trim();
+
+	return 'battle-' + id;
+}
+
 
 
 /**

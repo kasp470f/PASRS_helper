@@ -52,6 +52,9 @@ export class ReplaysManager {
 		const replays = this.getReplays();
 		const index = replays.findIndex(r => r.id === roomId && r.state !== ReplayRoomState.Ignored);
 		if (index !== -1) {
+			const replay = replays[index];
+			if (replay.state === state) return;
+
 			replays[index].state = state;
 			this.saveReplays(replays);
 		}
@@ -61,7 +64,6 @@ export class ReplaysManager {
 		const replays = this.getReplays();
 		const index = replays.findIndex(r => r.id === roomId && r.state !== ReplayRoomState.Ignored);
 		if (index !== -1) {
-			console.log(`Setting result for room ${roomId}`);
 			var replay = replays[index];
 			replay.state = ReplayRoomState.Finished;
 
@@ -125,6 +127,16 @@ export class ReplaysManager {
 		}
 	}
 
+	updateReplayUrl(roomId: string, url: string): void {
+		if (!this.hasRoom(roomId)) return;
+		const replays = this.getReplays();
+		const replay = replays.find(r => r.id === roomId && r.state !== ReplayRoomState.Ignored);
+		if (replay) {
+			replay.url = url;
+			this.saveReplays(replays);
+		}
+	}
+
 	private initReplay(data: string): RoomReplay | null {
 		if (!data) return null;
 
@@ -156,7 +168,6 @@ export class ReplaysManager {
 		return {
 			id: id,
 			state: ReplayRoomState.Initialized,
-			url: `https://replay.pokemonshowdown.com/${id}`,
 			p1: p1,
 			p2: p2,
 			result: ReplayRoomResult.Unknown

@@ -1,11 +1,11 @@
-import { RoomReplay } from "../../../types/replay";
+import { ReplayRoomState, RoomReplay } from "../../../types/replay";
 import './ReplayCard.scss';
 
-interface ReplayCardProps {
-	roomReplay: RoomReplay;
-}
+export const ReplayCard: React.FC<{ roomReplay: RoomReplay }> = ({ roomReplay }) => {
+	const isBattleCompleted = () => {
+		return roomReplay.state === ReplayRoomState.Finished || roomReplay.state === ReplayRoomState.Recorded;
+	}
 
-export const ReplayCard: React.FC<ReplayCardProps> = ({ roomReplay }) => {
 	return (
 		<div className="replay-card" onClick={() => copyToClipboard(roomReplay.url)}>
 			<section className="replay-info">
@@ -17,16 +17,22 @@ export const ReplayCard: React.FC<ReplayCardProps> = ({ roomReplay }) => {
 
 			<div className="replay-actions">
 				<span className="replay-state">
-					{ roomReplay.state == 'finished' ? roomReplay.result : roomReplay.state }
+					{isBattleCompleted() ? roomReplay.result : roomReplay.state}
 				</span>
-				<i className="fa fa-clipboard" aria-hidden="true"></i>
+				{
+					roomReplay.url ? (
+						<i className="fa fa-clipboard" aria-hidden="true"></i>
+					) : null
+				}
 			</div>
 		</div>
 	);
 }
 
-const copyToClipboard = (text: string) => {
-	navigator.clipboard.writeText(text).catch((err) => {
+const copyToClipboard = (url: string) => {
+	if (!url) return;
+
+	navigator.clipboard.writeText(url).catch((err) => {
 		console.error('Failed to copy text to clipboard:', err);
 	});
 }

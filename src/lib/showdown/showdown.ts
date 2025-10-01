@@ -1,5 +1,5 @@
 import { ReplayRoomState } from "../../types/replay";
-import { getFormatFromData, getRoomIdFromData, getUrlFromData } from "../../utils/showdown-data-utils";
+import { getFormatFromData, getRoomIdFromData, getRoomIdFromURL, getUrlFromData } from "../../utils/showdown-data-utils";
 import { isFormatMessage, isBattleInitMessage, isBattleFormatMessage, isWinMessage, isLeaveViewCommand, isReplayUploadedMessage } from "../../utils/showdown-protocol-utils";
 import { onSettingsUpdated } from "../events";
 import { ReplaysManager } from "../storage/replays-manager";
@@ -57,13 +57,16 @@ app.receive = (data: string) => {
 
 	if (isWinMessage(data)) {
 		const roomId = getRoomIdFromData(data);
-		replaysManager.setRoomResult(roomId, data);
+		if (replaysManager.getRoomState(roomId) === ReplayRoomState.OnGoing) {
+			replaysManager.setRoomResult(roomId, data);
+			app.send("/savereplay", roomId);
+		}
 	}
 
 	if (isReplayUploadedMessage(data)) {
 		const url = getUrlFromData(data);
-		const roomId = getRoomIdFromData(data);
-		console.log(`Replay uploaded for room ${roomId}: ${url}`);
+		const roomId = getRoomIdFromURL(url);
+		replaysManager.updateReplayUrl(roomId, url);
 
 		if (replaysManager.getRoomState(roomId) === ReplayRoomState.Finished) {
 			if (settings.use_clipboard) {
@@ -87,47 +90,6 @@ app.receive = (data: string) => {
 	}
 	
 	appReceive(data);
-
-	// TODO: Re-enable room filtering logic when needed
-	// let receivedRoom = data.startsWith(">");
-	// const data_split = data.split("-");
-
-	// // VGC only filter
-	// if (
-	// 	settings.vgc_only &&
-	// 	data_split &&
-	// 	data_split.length > 1 &&
-	// 	!data_split[1].includes("vgc")
-	// ) {
-	// 	receivedRoom = false;
-	// }
-
-	// // Custom replay filter
-	// if (
-	// 	settings.use_custom_replay_filter &&
-	// 	data_split &&
-	// 	data_split.length > 1 &&
-	// 	settings.custom_replay_filter.length > 0 &&
-	// 	!settings.custom_replay_filter.some(filter => data_split[1].includes(filter))
-	// ) {
-	// 	receivedRoom = false;
-	// }
-
-	// if (receivedRoom) {
-	// 	const roomId = data.slice(1, data.indexOf("\n"));
-	// 	if (!rooms.has(roomId) || rooms.get(roomId) !== ReplayRoomState.Recorded) {
-	// 		if (isBattleInitMessage(data)) {
-	// 			const lines = data.split("\n");
-	// 			if (lines[2].includes(app.user.attributes.name)) {
-	// 				replaysManager.setRoomState(roomId, ReplayRoomState.OnGoing);
-	// 			}
-	// 		}
-	// 		if (isWinMessage(data) && replaysManager.getRoomState(roomId) === ReplayRoomState.OnGoing) {
-	// 			app.send("/savereplay", roomId);
-	// 			replaysManager.setRoomState(roomId, ReplayRoomState.Finished);
-	// 		}
-	// 	}
-	// }
 };
 
 app.send = (data: string, roomId?: string) => {

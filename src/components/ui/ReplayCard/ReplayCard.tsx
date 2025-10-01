@@ -2,7 +2,7 @@ import { ReplayRoomState, RoomReplay } from "../../../types/replay";
 import './ReplayCard.scss';
 
 export const ReplayCard: React.FC<{ roomReplay: RoomReplay }> = ({ roomReplay }) => {
-	const isBattleCompleted = () => {
+	const isBattleCompleted = (): boolean => {
 		return roomReplay.state === ReplayRoomState.Finished || roomReplay.state === ReplayRoomState.Recorded;
 	}
 

@@ -9,7 +9,6 @@ export class ReplaysManager {
     private removeReplayUpdateListener?: () => void;
 	
 	constructor() {
-		// Listen for replay updates from other contexts
 		this.removeReplayUpdateListener = onReplaysUpdated((replays) => {
 			this.replays = replays;
 		});
@@ -33,7 +32,7 @@ export class ReplaysManager {
 		return [];
 	}
 
-	getReplay(roomId: string) {
+	getReplay(roomId: string): RoomReplay | undefined {
 		const replays = this.getReplays();
 		return replays.find(r => r.id === roomId);
 	}
@@ -60,7 +59,7 @@ export class ReplaysManager {
 		}
 	}
 
-	setRoomResult(roomId: string, data: string) {
+	setRoomResult(roomId: string, data: string): void {
 		const replays = this.getReplays();
 		const index = replays.findIndex(r => r.id === roomId && r.state !== ReplayRoomState.Ignored);
 		if (index !== -1) {
@@ -83,7 +82,7 @@ export class ReplaysManager {
 		}
 	}
 
-	hasRoom(roomId: string) {
+	hasRoom(roomId: string): boolean {
 		const replays = this.getReplays();
 		return replays.some(r => r.id === roomId);
 	}

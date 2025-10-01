@@ -11,11 +11,11 @@ const VERSION_TEXT = VERSION;
 const Settings = () => {
 	const { settings, updateSetting, customFormats } = useSettings();
 
-	const handleCheckboxChange = (key: SettingsKey, value: boolean) => {
+	const handleCheckboxChange = (key: SettingsKey, value: boolean): void => {
 		updateSetting(key, value);
 	};
 
-	const handleFormatSelectChange = (key: SettingsKey, value: string[]) => {
+	const handleFormatSelectChange = (key: SettingsKey, value: string[]): void => {
 		updateSetting(key, value);
 	};
 
@@ -67,7 +67,7 @@ const Settings = () => {
 	);
 };
 
-const openIssuesPage = () => {
+const openIssuesPage = (): void => {
 	window.open('https://github.com/alchemistake/PASRS_helper/issues', '_blank');
 };
 

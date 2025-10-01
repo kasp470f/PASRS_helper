@@ -12,7 +12,6 @@ export class SettingsManager {
     private constructor() {
         this.settings = this.loadFromStorage();
         
-        // Listen for format updates from other contexts
         this.removeFormatsListener = onFormatsUpdated((formats) => {
             this.customFormats = formats;
         });

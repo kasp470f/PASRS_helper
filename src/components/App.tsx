@@ -4,7 +4,7 @@ import ReplayList from './ReplayList/ReplayList';
 import Settings from './Settings/Settings';
 
 const App = () => {
-    const checkSize = () => {
+    const checkSize = (): void => {
         const app = document.querySelector('.pasrs-app') as HTMLElement;
         const minWidth = 655; // Minimum width to display both sections side by side
 

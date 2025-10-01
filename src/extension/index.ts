@@ -1,11 +1,11 @@
-function injectScript(file: string) {
+function injectScript(file: string): void {
 	const s: HTMLScriptElement = document.createElement("script");
 	s.src = chrome.runtime.getURL(file);
 	s.onload = () => s.remove();
 	(document.head || document.documentElement).append(s);
 }
 
-function injectStyle(file: string) {
+function injectStyle(file: string): void {
 	const s: HTMLLinkElement = document.createElement("link");
 	s.rel = "stylesheet";
 	s.href = chrome.runtime.getURL(file);

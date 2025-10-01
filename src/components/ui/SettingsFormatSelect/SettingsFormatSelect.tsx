@@ -25,14 +25,14 @@ const SettingsFormatSelect: React.FC<SettingsFormatSelectProps> = ({
         format.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const handleToggleOption = (format: string) => {
+    const handleToggleOption = (format: string): void => {
         const newValue = value.includes(format)
             ? value.filter(v => v !== format)
             : [...value, format];
         onChange(settingsKey, newValue);
     };
 
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent): void => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
             setIsOpen(false);
             setSearchTerm('');

@@ -18,7 +18,7 @@ const SettingsCheckbox: React.FC<SettingsCheckboxProps> = ({
 	onChange,
 	disabled
 }) => {
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
 		onChange(settingsKey, event.target.checked);
 	};
 

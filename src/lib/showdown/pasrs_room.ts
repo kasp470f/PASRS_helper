@@ -1,6 +1,6 @@
 import { createHtmlRoom } from "./room";
 
-function createPASRSRoom() {
+function createPASRSRoom(): void {
     const room = createHtmlRoom("view-pasrs-helper", "PASRS", {
         side: true,
         icon: "camera",

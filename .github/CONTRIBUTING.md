@@ -16,3 +16,5 @@ The project is maintained by the following individuals:<br>
 - [Alchemistake](https://twitter.com/alchemistake)<br> 
 - [Blox](https://twitter.com/ItzMrBlox)<br>
 - [PokeBin Dev](https://twitter.com/PokeBinDev)<br>
+
+and big thanks to [Showdex](https://github.com/doshidak/showdex) who provided the Room generation code.

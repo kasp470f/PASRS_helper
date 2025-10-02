@@ -1,4 +1,3 @@
-// src/hooks/useSettings.ts
 import { useState, useCallback, useEffect } from 'react';
 import { SettingsManager } from '../lib/storage/settings-manager';
 import { Settings } from '../types/settings';

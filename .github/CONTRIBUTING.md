@@ -14,7 +14,7 @@ Please follow the guidelines below to ensure a smooth contribution process.
 ## Maintainers / Credits
 The project is maintained by the following individuals:<br>
 - [Alchemistake](https://twitter.com/alchemistake)<br> 
-- [Blox](https://twitter.com/ItzMrBlox)<br>
+- [Blox](https://twitter.com/ItzMrBlox) · [Github](https://github.com/kasp470f)<br>
 - [PokeBin Dev](https://twitter.com/PokeBinDev)<br>
 
 and big thanks to [Showdex](https://github.com/doshidak/showdex) who provided the Room generation code.

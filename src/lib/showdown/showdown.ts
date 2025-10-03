@@ -4,6 +4,7 @@ import { isFormatMessage, isBattleInitMessage, isBattleFormatMessage, isWinMessa
 import { onSettingsUpdated } from "../events";
 import { ReplaysManager } from "../storage/replays-manager";
 import { SettingsManager } from "../storage/settings-manager";
+import { copyToClipboardWithRetry } from "../browser/browser";
 import createPASRSRoom from "./pasrs_room";
 import { App } from "./room";
 
@@ -70,17 +71,7 @@ app.receive = (data: string) => {
 
 		if (replaysManager.getRoomState(roomId) === ReplayRoomState.Finished) {
 			if (settings.use_clipboard) {
-				setTimeout(function clipboardFunction() {
-					navigator.clipboard
-						.writeText(url)
-						.then(() => {
-							if (settings.notifications)
-								new Notification("Your replay has been uploaded!");
-						})
-						.catch(() => {
-							setTimeout(clipboardFunction, 250);
-						});
-				}, 0);
+				copyToClipboardWithRetry(url, settings.notifications);
 			}
 
 			replaysManager.setRoomState(roomId, ReplayRoomState.Recorded);

@@ -25,8 +25,6 @@ export function getRoomIdFromURL(url: string): string {
 	return 'battle-' + id;
 }
 
-
-
 /**
  * Extracts a URL starting with "https://" from the given string data.
  * The URL is expected to end before the substring '" target='.

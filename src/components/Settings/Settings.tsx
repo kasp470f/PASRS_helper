@@ -59,7 +59,7 @@ const Settings = () => {
 			<section className="info-section">
 				<button onClick={openCreditsPage}>
 					<i className="fa fa-heart" aria-hidden="true"></i>
-					Credits & Contributors
+					Credits
 				</button>
 				<button onClick={openIssuesPage}>
 					<i className="fa fa-bug" aria-hidden="true"></i>

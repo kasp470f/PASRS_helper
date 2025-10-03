@@ -4,7 +4,7 @@ import './ReplayList.scss';
 import { ReplayRoomState } from "../../types/replay";
 
 const ReplayList = () => {
-	const { replays, clearAllReplays } = useReplays();
+	const { replays, clearAllReplays, copyAllReplays } = useReplays();
 	var shownReplays = replays.filter(replay => replay.state !== ReplayRoomState.Ignored);
 
 	return (
@@ -24,8 +24,10 @@ const ReplayList = () => {
 					)}
 				</section>
 
-				<footer className="replay-footer" onClick={clearAllReplays}>
-					<p>Clear All Replays</p>
+				<footer className="replay-footer">
+					<div className="clear-all" onClick={clearAllReplays}>Clear All Replays</div>
+					<div className="divider"></div>
+					<div className="copy-all" onClick={copyAllReplays}>Copy All Replays</div>
 				</footer>
 			</section>
 		</section>

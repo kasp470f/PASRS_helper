@@ -24,6 +24,17 @@ export const useReplays = () => {
 		setReplays([]);
 	}, []);
 
+	const copyAllReplays = useCallback(() => {
+		const allReplays = replaysManager.getReplays();
+		if (allReplays.length === 0) return;
+		const replayUrls = allReplays.map(replay => replay.url).join('\n');
+		navigator.clipboard.writeText(replayUrls).then(() => {
+			console.log('Replays copied to clipboard');
+		}).catch(err => {
+			console.error('Failed to copy replays: ', err);
+		});
+	}, [replaysManager]);
+
 	useEffect(() => {
 		const removeReplaysListener = onReplaysUpdated((updatedReplays) => {
 			setReplays([...updatedReplays]);
@@ -37,6 +48,7 @@ export const useReplays = () => {
 	return {
 		replays,
 		updateRoomState,
-		clearAllReplays
+		clearAllReplays,
+		copyAllReplays,
 	};
 };

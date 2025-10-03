@@ -98,7 +98,6 @@ app.send = (data: string, roomId?: string) => {
 	appSend(data, roomId);
 	if (settings.active && isForfeitCommand(data) && roomId && replaysManager.getRoomState(roomId) === ReplayRoomState.OnGoing) {
 		appSend("/savereplay", roomId);
-		replaysManager.setRoomState(roomId, ReplayRoomState.Finished);
 	}
 	if (isLeaveViewCommand(data)) {
 		setTimeout(createPASRSRoom, 0);

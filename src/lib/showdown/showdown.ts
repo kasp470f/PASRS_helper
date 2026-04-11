@@ -57,8 +57,10 @@ app.receive = (data: string) => {
 		const roomId = getRoomIdFromData(data);
 		const room = replaysManager.getReplay(roomId);
 
+		const VGC_KEYWORDS = ['vgc', 'champions'];
+
 		if (settings.vgc_only) {
-			if (room && room.format && !room.format.toLowerCase().includes('vgc')) {
+			if (room && room.format && !VGC_KEYWORDS.some((keyword) => room.format?.toLowerCase().includes(keyword))) {
 				replaysManager.setRoomState(roomId, ReplayRoomState.Ignored);
 			}
 		} else if (settings.use_custom_replay_filter) {

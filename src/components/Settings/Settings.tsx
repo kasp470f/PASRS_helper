@@ -62,7 +62,7 @@ const Settings = () => {
 
 				<SettingsCheckbox
 					settingsKey="vgc_only"
-					label="VGC Mode (Only save VGC replays)"
+					label="VGC/Champions Mode (Only save VGC/Champions replays)"
 					checked={settings.vgc_only}
 					onChange={handleCheckboxChange}
 					disabled={settings.use_custom_replay_filter}
